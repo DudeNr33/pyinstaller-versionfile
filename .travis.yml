@@ -2,6 +2,9 @@ language: python
 python: 3.6
 install:
   - pip install tox
+  - pip install codecov
 script:
   - tox -e py27-tests
   - tox -e py36-tests-cov
+after_success:
+  - codecov
