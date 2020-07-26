@@ -1,5 +1,6 @@
 language: python
 python: 3.6
+cache: pip
 jobs:
   include:
     - name: "Python 2.7 on Linux"
@@ -7,6 +8,7 @@ jobs:
     - name: "Python 3.5 on Linux"
       script: tox -e py35-tests
     - name: "Python 3.6 on Linux with Code Coverage"
+      install: pip install codecov
       script: tox -e py36-tests-cov
       after_success: codecov
     - name: "Linter"
@@ -20,7 +22,6 @@ jobs:
       env:
         - PATH=/c/Python36:/c/Python36/Scripts:$PATH
         - includeE2E=True
-      script: tox -e py36-tests
+      script: tox -e py36-tests-win
 install:
   - pip install tox
-  - pip install codecov   # TODO: move this into the job matrix
