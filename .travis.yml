@@ -1,0 +1,7 @@
+language: python
+python: 3.6
+install:
+  - pip install tox
+script:
+  - tox -e py27-tests
+  - tox -e py36-tests-cov
