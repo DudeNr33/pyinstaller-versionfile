@@ -53,7 +53,7 @@ def temp_version_file(temp_dir):
 
 
 @pytest.mark.skipif(
-    sys.platform.startswith("win") and os.environ.get("includeE2E", "False") != "True",
+    not sys.platform.startswith("win") or os.environ.get("includeE2E", "False") != "True",
     reason="Long running test, only possible on windows OS.")
 def test_end2end_exe_generation(temp_dir, temp_version_file):
     """
