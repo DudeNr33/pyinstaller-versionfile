@@ -3,30 +3,48 @@ python: 3.6
 cache: pip
 jobs:
   include:
-    - name: "Python 2.7 on Linux"
-      script: tox -e py27-tests
-    - name: "Python 3.5 on Linux"
-      script: tox -e py35-tests
-    - name: "Python 3.6 on Linux with Code Coverage"
-      install:
-        - pip install tox
-        - pip install codecov
-      script: tox -e py36-tests-cov
-      after_success: codecov
-    - name: "Linter"
-      script: tox -e lint
-    - name: "Python 3.6 on Windows for End2End tests"
-      os: windows
-      language: shell
-      before_install:
-        - choco install python --version 3.6
-        - python -m pip install --upgrade pip
-      install:
-        - pip install tox
-        - pip install pyinstaller
-      env:
-        - PATH=/c/Python36:/c/Python36/Scripts:$PATH
-        - includeE2E=True
-      script: tox -e py36-tests-win
+  - stage: unit test
+    name: Python 2.7 on Linux
+    script: tox -e py27-tests
+  - name: Python 3.5 on Linux
+    script: tox -e py35-tests
+  - name: Python 3.6 on Linux with Code Coverage
+    install:
+    - pip install tox
+    - pip install codecov
+    script: tox -e py36-tests-cov
+    after_success: codecov
+  - name: Linter
+    script: tox -e lint
+
+  - stage: integration test
+    name: Python 3.6 on Windows for End2End tests
+    os: windows
+    language: shell
+    before_install:
+    - choco install python --version 3.6
+    - python -m pip install --upgrade pip
+    install:
+    - pip install tox
+    - pip install pyinstaller
+    env:
+    - PATH=/c/Python36:/c/Python36/Scripts:$PATH
+    - includeE2E=True
+    script: tox -e py36-tests-win
+
+  - stage: deploy
+    name: "Deploy to PyPI"
+    install: skip
+    script: skip
+    deploy:
+      provider: pypi
+      username: "__token__"
+      password:
+        secure: YJxAQkupOv8mC5ubhWj7QY0ZkqcUFStmkc7EwD/1cNwF7cRautZnMWurD6+7YqqhsLOPSxTtT0CsvKF0rH9nI+Zx4iL1dIW+u6zypR0Tgjfj/Xl1GgWxcBxlRXHqw8anALcFyD1+MKES6HFbrb06xf8fiTHNb4Dy17BxivxGub/wYqzfmYlnszQWse9bPjCdf+4IaB5YGaGt2wCjBzbGPQ0erlxz7k9+VA+2mUPVoJzpZ5hZMSB5WOapwV4/yPGy8Xt6HQD5Gtlu8afRwvmQEBK7s68MANcjpxv4q9FYqfZd5iGfmi6sFgWQ5g1zsREYfMlwV0MS2pyLwisah9W2AuRzQpVTis6D/Odod2ebnVBQoR5e9NJDeAmrQ7qBGtX5OLi7XPgcxCjGSmvIlxSwt4GYS11C872ITBiJyLFGYstGVM0U5IXWGsbfTYo6pncO7jDckN9VSQILpjxn8BwUP9oTBmo9MXnkBy3l0kyO0Is5W/cpd9aGN+02q2Lh98KYW/6T4/sj1cUEzccHUMmvWiKxeis8eZVJ/P1cC607fvitmqKpLDctFX+37G66m+jpReaXAfa59fFWkjWRzRD+lxcvlsoczizyP/CgOnKTtHyvhRlURYY8USFDouZRcdQ5mm4BqrCJ80CyHJpSqBv0cIOkWwLi2QeynviH4rey86U=
+      on:
+        tags: true
+      skip_existing: true
+      distributions: "sdist bdist_wheel"
+
 install:
   - pip install tox
