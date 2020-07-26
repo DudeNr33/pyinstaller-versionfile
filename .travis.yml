@@ -19,6 +19,7 @@ jobs:
       env:
         - PATH=/c/Python36:/c/Python36/Scripts:$PATH
         - includeE2E=True
+      script: tox -e py36-tests
 install:
   - pip install tox
   - pip install codecov
