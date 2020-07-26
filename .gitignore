@@ -1,0 +1,4 @@
+/src/pyinstaller_versionfile.egg-info/
+/venv/
+/.tox/
+/.idea/

@@ -1,0 +1,7 @@
+include VERSION.txt
+include tox.ini
+include requirements*.txt
+recursive-include test *.py
+graft test/resources
+global-exclude *.py[cod]
+include src/pyinstaller_versionfile/version_file_template.txt
