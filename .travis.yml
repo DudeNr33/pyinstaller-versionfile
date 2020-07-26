@@ -8,6 +8,7 @@ jobs:
       script: tox -e py35-tests
     - name: "Python 3.6 on Linux with Code Coverage"
       script: tox -e py36-tests-cov
+      after_success: codecov
     - name: "Linter"
       script: tox -e lint
     - name: "Python 3.6 on Windows for End2End tests"
@@ -22,6 +23,4 @@ jobs:
       script: tox -e py36-tests
 install:
   - pip install tox
-  - pip install codecov
-after_success:
-  - codecov
+  - pip install codecov   # TODO: move this into the job matrix
