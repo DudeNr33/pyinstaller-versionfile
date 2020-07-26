@@ -8,7 +8,9 @@ jobs:
     - name: "Python 3.5 on Linux"
       script: tox -e py35-tests
     - name: "Python 3.6 on Linux with Code Coverage"
-      install: pip install codecov
+      install:
+        - pip install tox
+        - pip install codecov
       script: tox -e py36-tests-cov
       after_success: codecov
     - name: "Linter"
@@ -19,6 +21,9 @@ jobs:
       before_install:
         - choco install python --version 3.6
         - python -m pip install --upgrade pip
+      install:
+        - pip install tox
+        - pip install pyinstaller
       env:
         - PATH=/c/Python36:/c/Python36/Scripts:$PATH
         - includeE2E=True
