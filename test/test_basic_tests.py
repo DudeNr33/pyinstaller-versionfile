@@ -3,11 +3,11 @@ from __future__ import unicode_literals
 import codecs
 import os
 import subprocess
+import sys
 import tempfile
 
 import pytest
 import yaml
-from win32api import GetFileVersionInfo, LOWORD, HIWORD
 
 from pyinstaller_versionfile.create_version_file import MetaData, parse_args
 
@@ -20,6 +20,7 @@ TEST_APP_SPEC_FILE = os.path.join(RESOURCE_DIR, "testapp.spec")
 
 
 def get_version_number(filename):
+    from win32api import GetFileVersionInfo, LOWORD, HIWORD
     try:
         info = GetFileVersionInfo(filename, "\\")
         ms = info['FileVersionMS']
@@ -51,7 +52,9 @@ def temp_version_file(temp_dir):
     return os.path.join(temp_dir, "version_file.txt")
 
 
-@pytest.mark.skipif(os.environ.get("includeE2E", "False") != "True", reason="Long running test.")
+@pytest.mark.skipif(
+    sys.platform.startswith("win") and os.environ.get("includeE2E", "False") != "True",
+    reason="Long running test, only possible on windows OS.")
 def test_end2end_exe_generation(temp_dir, temp_version_file):
     """
     Checks if pyinstaller is able to interpret the generated version file and if the generated EXE has the correct
