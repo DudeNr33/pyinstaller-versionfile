@@ -1,10 +1,26 @@
 language: python
 python: 3.6
+jobs:
+  include:
+    - name: "Python 2.7 on Linux"
+      script: tox -e py27-tests
+    - name: "Python 3.5 on Linux"
+      script: tox -e py35-tests
+    - name: "Python 3.6 on Linux with Code Coverage"
+      script: tox -e py36-tests-cov
+    - name: "Linter"
+      script: tox -e lint
+    - name: "Python 3.6 on Windows for End2End tests"
+      os: windows
+      language: shell
+      before_install:
+        - choco install python --version 3.6
+        - python -m pip install --upgrade pip
+      env:
+        - PATH=/c/Python36:/c/Python36/Scripts:$PATH
+        - includeE2E=True
 install:
   - pip install tox
   - pip install codecov
-script:
-  - tox -e py27-tests
-  - tox -e py36-tests-cov
 after_success:
   - codecov
