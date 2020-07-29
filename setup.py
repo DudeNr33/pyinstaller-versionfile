@@ -31,7 +31,7 @@ setuptools.setup(
     description="Create a version file from a simple YAML config file",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="svn://nas/refarch/pyinstaller-versionfile",
+    url="https://github.com/DudeNr33/pyinstaller-versionfile",
     packages=setuptools.find_packages(where="src"),
     package_dir={'': 'src'},
     include_package_data=True,
