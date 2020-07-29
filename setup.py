@@ -44,8 +44,11 @@ setuptools.setup(
     classifiers=[
         "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 3",
-        "License :: Other/Proprietary License",
-        "Operating System :: OS Independent",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: Microsoft :: Windows",
+        "Topic :: Software Development",
+        "Topic :: Software Development :: Build Tools",
+        "Environment :: Console",
     ],
     python_requires='>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*'
 )
