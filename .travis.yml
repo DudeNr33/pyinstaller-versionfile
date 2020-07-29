@@ -14,6 +14,10 @@ jobs:
     - pip install codecov
     script: tox -e py36-tests-cov
     after_success: codecov
+  - name: Python 3.7 on Linux
+    script: tox -e py37-tests
+  - name: Python 3.8 on Linux
+    script: tox -e py38-tests
   - name: Linter
     script: tox -e lint
 
