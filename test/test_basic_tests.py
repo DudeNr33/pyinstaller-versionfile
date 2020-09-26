@@ -9,6 +9,11 @@ import tempfile
 import pytest
 import yaml
 
+try:
+    from yaml import CLoader as Loader
+except ImportError:
+    from yaml import Loader
+
 from pyinstaller_versionfile.create_version_file import MetaData, parse_args
 
 RESOURCE_DIR = os.path.join(os.path.dirname(__file__), "resources")
@@ -62,7 +67,7 @@ def test_end2end_exe_generation(temp_dir, temp_version_file):
     Other attributes are not checked for.
     """
     with open(ACCEPTANCETEST_METADATA) as infile:
-        metadata = yaml.load(infile, Loader=yaml.CLoader)
+        metadata = yaml.load(infile, Loader=Loader)
     expected_version = metadata["Version"]
     MetaData(ACCEPTANCETEST_METADATA).create_version_file(temp_version_file)
     build_dir = os.path.join(temp_dir, "build")
@@ -112,14 +117,14 @@ def test_string_file_info(temp_version_file, version_file_attribute, metadata_ke
     MetaData(ACCEPTANCETEST_METADATA).create_version_file(outfile=temp_version_file)
     with codecs.open(temp_version_file, encoding="utf-8") as versionfile, \
             codecs.open(ACCEPTANCETEST_METADATA, encoding="utf-8") as metadata_file:
-        metadata_attribute = yaml.load(metadata_file, Loader=yaml.CLoader)[metadata_key]
+        metadata_attribute = yaml.load(metadata_file, Loader=Loader)[metadata_key]
         assert "StringStruct(u'{}', u'{}')".format(version_file_attribute, metadata_attribute) in versionfile.read()
 
 
 def test_file_version_product_version_from_metadata_file(temp_version_file):
     MetaData(ACCEPTANCETEST_METADATA).create_version_file(outfile=temp_version_file)
     with codecs.open(ACCEPTANCETEST_METADATA, encoding="utf-8") as metadata_file:
-        expected_version = yaml.load(metadata_file, Loader=yaml.CLoader)["Version"]
+        expected_version = yaml.load(metadata_file, Loader=Loader)["Version"]
     assert _version_is_set_correctly(temp_version_file, expected_version)
 
 
