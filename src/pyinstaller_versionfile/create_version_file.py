@@ -5,6 +5,11 @@ import os.path
 import yaml
 from jinja2 import Template
 
+try:
+    from yaml import CLoader as Loader
+except ImportError:
+    from yaml import Loader
+
 TEMPLATE_FILE = os.path.join(os.path.abspath(os.path.dirname(__file__)), "version_file_template.txt")
 
 
@@ -24,7 +29,7 @@ class MetaData(object):
 
     def _read_metadata_from_file(self):
         with codecs.open(self._filepath, encoding="utf-8") as infile:
-            self._metadata = yaml.load(infile, Loader=yaml.CLoader)
+            self._metadata = yaml.load(infile, Loader=Loader)
 
     def _explicit_version_was_provided(self):
         return self._version is not None
