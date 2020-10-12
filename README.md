@@ -1,7 +1,7 @@
 # pyinstaller-versionfile
 ![GitHub](https://img.shields.io/github/license/dudenr33/pyinstaller-versionfile) 
 ![PyPI](https://img.shields.io/pypi/v/pyinstaller-versionfile)
-![Travis (.org)](https://img.shields.io/travis/dudenr33/pyinstaller-versionfile/master)
+![Travis (.com) branch](https://img.shields.io/travis/com/dudenr33/pyinstaller-versionfile/master)
 ![Codecov](https://img.shields.io/codecov/c/github/dudenr33/pyinstaller-versionfile/master)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/pyinstaller-versionfile)
 ![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/DudeNr33/pyinstaller-versionfile)
