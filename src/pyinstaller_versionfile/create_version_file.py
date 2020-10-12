@@ -7,7 +7,7 @@ from jinja2 import Template
 
 try:
     from yaml import CLoader as Loader
-except ImportError:
+except ImportError:  # pragma: no cover
     from yaml import Loader
 
 TEMPLATE_FILE = os.path.join(os.path.abspath(os.path.dirname(__file__)), "version_file_template.txt")
