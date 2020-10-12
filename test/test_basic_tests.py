@@ -9,7 +9,7 @@ import tempfile
 import pytest
 import yaml
 
-from pyinstaller_versionfile.create_version_file import MetaData, parse_args
+from pyinstaller_versionfile.create_version_file import MetaData, parse_args, main
 
 RESOURCE_DIR = os.path.join(os.path.dirname(__file__), "resources")
 ACCEPTANCETEST_METADATA = os.path.join(RESOURCE_DIR, "acceptancetest_metadata.yml")
@@ -179,3 +179,10 @@ def test_parser(parameter_to_check):
 def test_default_parser_values(parameter, expected_default_value):
     parsed = parse_args(["in.yml"])
     assert getattr(parsed, parameter) == expected_default_value
+
+
+def test_main(temp_version_file):
+    main([METADATA_EXT_VERSION_FILE, "--outfile", temp_version_file])
+    with open(EXT_VERSION_FILE) as ext_version_file:
+        expected_version = ext_version_file.read().strip()
+    assert _version_is_set_correctly(temp_version_file, expected_version)
