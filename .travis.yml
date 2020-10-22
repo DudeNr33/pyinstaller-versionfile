@@ -58,6 +58,5 @@ jobs:
 install:
   - pip install tox
   - if [ "$TOXENV" = "py36-tests-cov" ]; then pip install codecov; fi
-  - if [ "$TOXENV" = "py36-tests-win" ]; then pip install pyinstaller; fi
 
 script: tox
