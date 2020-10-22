@@ -61,3 +61,10 @@ It is also possible to set the version directly over the command line using the 
 create-version-file metadata.yml --outfile file_version_info.txt --version 0.8.1.5
 ```
 This can be useful if you want to use a CI build number as the version. 
+
+
+## Contributing
+
+If you think you found a bug, or have a proposal for an enhancement, do not hesitate 
+to create a new issue or submit a pull request. I will look into it as soon
+as possible.
