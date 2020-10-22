@@ -1,3 +1,7 @@
+"""
+Integration tests for interaction with PyInstaller.
+"""
+
 import os
 import subprocess
 import sys
@@ -18,7 +22,7 @@ TEST_APP_SPEC_FILE = os.path.join(RESOURCE_DIR, "testapp.spec")
     or os.environ.get("includeE2E", "False") != "True",
     reason="Long running test, only possible on windows OS."
 )
-def test_end2end_exe_generation(temp_dir, temp_version_file):
+def test_end2end_exe_generation(tmpdir, temp_version_file):
     """
     Checks if pyinstaller is able to interpret the generated version file and if the generated EXE has the correct
     version info.
@@ -28,8 +32,8 @@ def test_end2end_exe_generation(temp_dir, temp_version_file):
         metadata = yaml.load(infile, Loader=yaml.CLoader)
     expected_version = metadata["Version"]
     MetaData(ACCEPTANCETEST_METADATA).create_version_file(temp_version_file)
-    build_dir = os.path.join(temp_dir, "build")
-    out_dir = os.path.join(temp_dir, "dist")
+    build_dir = os.path.join(tmpdir, "build")
+    out_dir = os.path.join(tmpdir, "dist")
     returncode = subprocess.call(
         [
             "pyinstaller",
@@ -46,11 +50,17 @@ def test_end2end_exe_generation(temp_dir, temp_version_file):
 
 
 def get_version_number(filename):
+    # pylint: disable=no-name-in-module, import-outside-toplevel
     from win32api import GetFileVersionInfo, LOWORD, HIWORD
     try:
         info = GetFileVersionInfo(filename, "\\")
-        ms = info['FileVersionMS']
-        ls = info['FileVersionLS']
-        return "{}.{}.{}.{}".format(HIWORD(ms), LOWORD(ms), HIWORD(ls), LOWORD(ls))
-    except:  # noqa
+        file_version_ms = info['FileVersionMS']
+        file_version_ls = info['FileVersionLS']
+        return "{}.{}.{}.{}".format(
+            HIWORD(file_version_ms),
+            LOWORD(file_version_ms),
+            HIWORD(file_version_ls),
+            LOWORD(file_version_ls),
+        )
+    except Exception:  # pylint: disable=broad-except
         return None

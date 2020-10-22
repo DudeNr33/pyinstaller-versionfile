@@ -1,3 +1,8 @@
+"""
+Author: Andreas Finkler
+
+Main module for pyinstaller-versionfile.
+"""
 import argparse
 import codecs
 import os.path
@@ -13,7 +18,11 @@ except ImportError:  # pragma: no cover
 TEMPLATE_FILE = os.path.join(os.path.abspath(os.path.dirname(__file__)), "version_file_template.txt")
 
 
+# pylint: disable=too-few-public-methods
 class MetaData(object):
+    """
+    This class handles the conversion from a metadata YAML file to a versionfile understandable by PyInstaller.
+    """
     def __init__(self, metadata_file, version=None):
         self._filepath = metadata_file
         self._metadata = None
@@ -47,8 +56,8 @@ class MetaData(object):
     def _render_version_file(self, outfile):
         with codecs.open(TEMPLATE_FILE, encoding="utf-8") as infile:
             template = Template(infile.read())
-        with codecs.open(outfile, "w", encoding="utf-8") as outfile:
-            outfile.write(template.render(**self._metadata))
+        with codecs.open(outfile, "w", encoding="utf-8") as file_handle:
+            file_handle.write(template.render(**self._metadata))
 
 
 def main(args=None):

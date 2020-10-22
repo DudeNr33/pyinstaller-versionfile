@@ -1,3 +1,7 @@
+"""
+Integration tests for the command line utility provided by pyinstaller-versionfile.
+"""
+
 import os
 import subprocess
 

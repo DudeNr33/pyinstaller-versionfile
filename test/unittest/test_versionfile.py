@@ -1,8 +1,10 @@
+"""
+Unit tests for creation of the versionfile itself.
+"""
 from __future__ import unicode_literals
 
 import codecs
 import os
-import tempfile
 
 import pytest
 import yaml
