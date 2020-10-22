@@ -19,6 +19,7 @@ from pyinstaller_versionfile.create_version_file import MetaData, parse_args, ma
 RESOURCE_DIR = os.path.join(os.path.dirname(__file__), "../resources")
 ACCEPTANCETEST_METADATA = os.path.join(RESOURCE_DIR, "acceptancetest_metadata.yml")
 METADATA_EXT_VERSION_FILE = os.path.join(RESOURCE_DIR, "metadata_reference_to_other_file.yml")
+METADATA_WITHOUT_VERSION = os.path.join(RESOURCE_DIR, "metadata_without_version.yml")
 EXT_VERSION_FILE = os.path.join(RESOURCE_DIR, "VERSION.txt")
 TEST_APP_PY_FILE = os.path.join(RESOURCE_DIR, "testapp.py")
 TEST_APP_SPEC_FILE = os.path.join(RESOURCE_DIR, "testapp.spec")
@@ -61,6 +62,25 @@ def test_file_version_product_version_from_external_file(temp_version_file):
     MetaData(METADATA_EXT_VERSION_FILE).create_version_file(outfile=temp_version_file)
     with open(EXT_VERSION_FILE) as ext_version_file:
         expected_version = ext_version_file.read().strip()
+    assert _version_is_set_correctly(temp_version_file, expected_version)
+
+
+@pytest.mark.parametrize(
+    "given_version,expected_version",
+    [
+        ("1", "1.0.0.0"),
+        ("1.2", "1.2.0.0"),
+        ("1.2.3", "1.2.3.0"),
+    ]
+)
+def test_fill_version_number_if_too_short(temp_version_file, given_version, expected_version):
+    """
+    (Issue #4)
+    PyInstaller only handles version numbers with exactly 4 places.
+    If a version number with less than four places is provided, pyinstaller-versionfile fills up the remaining places
+    with zeros: 1.2.3 will be implicitly converted to 1.2.3.0, 1.2 will become 1.2.0.0.
+    """
+    MetaData(ACCEPTANCETEST_METADATA, version=given_version).create_version_file(outfile=temp_version_file)
     assert _version_is_set_correctly(temp_version_file, expected_version)
 
 

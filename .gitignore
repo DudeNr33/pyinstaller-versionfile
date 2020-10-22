@@ -4,3 +4,4 @@
 /.idea/
 /.coverage
 /testapp.spec
+/test/integrationtest/testapp.spec
