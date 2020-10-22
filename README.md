@@ -3,6 +3,8 @@
 ![PyPI](https://img.shields.io/pypi/v/pyinstaller-versionfile)
 ![Travis (.com) branch](https://img.shields.io/travis/com/dudenr33/pyinstaller-versionfile/master)
 ![Codecov](https://img.shields.io/codecov/c/github/dudenr33/pyinstaller-versionfile/master)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/pyinstaller-versionfile)
+![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/DudeNr33/pyinstaller-versionfile)
 
 Create a windows version-file from a simple YAML file that can be used by PyInstaller.
 

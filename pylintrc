@@ -1,0 +1,12 @@
+[MASTER]
+load-plugins=pylint.extensions.mccabe
+
+[DESIGN]
+max-complexity=10
+
+[FORMAT]
+max-line-length=120
+
+[MESSAGES CONTROL]
+# needed for Python 2.7 compatibility: useless-object-inheritance
+disable=useless-object-inheritance, missing-function-docstring

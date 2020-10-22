@@ -2,8 +2,10 @@ include VERSION.txt
 include LICENSE
 include README.md
 include tox.ini
+include pylintrc
 include requirements*.txt
 recursive-include test *.py
+recursive-include test *.spec
 graft test/resources
 global-exclude *.py[cod]
 include src/pyinstaller_versionfile/version_file_template.txt
