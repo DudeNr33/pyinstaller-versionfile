@@ -43,8 +43,8 @@ jobs:
 
   - stage: deploy
     name: "Deploy to PyPI"
-    install: skip
-    script: skip
+    install: pip install pystache gitchangelog
+    script: gitchangelog > CHANGELOG.md
     deploy:
       provider: pypi
       username: "__token__"

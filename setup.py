@@ -14,6 +14,9 @@ with open("VERSION.txt", "r") as fh:
 with open("requirements.txt", "r") as fh:
     requirements = fh.readlines()
 
+with open("CHANGELOG.md", "r") as fh:
+    changelog = fh.read()
+
 
 def package_files(directory):
     paths = []
@@ -32,7 +35,7 @@ setuptools.setup(
     author="Andreas Finkler",
     author_email="andi.finkler@gmail.com",
     description="Create a version file from a simple YAML config file",
-    long_description=long_description,
+    long_description=long_description + "\n\n" + changelog,
     long_description_content_type="text/markdown",
     url="https://github.com/DudeNr33/pyinstaller-versionfile",
     packages=setuptools.find_packages(where="src"),

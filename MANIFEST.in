@@ -1,6 +1,7 @@
 include VERSION.txt
 include LICENSE
 include README.md
+include CHANGELOG.md
 include tox.ini
 include pylintrc
 include requirements*.txt
