@@ -3,6 +3,8 @@
 ![PyPI](https://img.shields.io/pypi/v/pyinstaller-versionfile)
 ![Travis (.com) branch](https://img.shields.io/travis/com/dudenr33/pyinstaller-versionfile/master)
 ![Codecov](https://img.shields.io/codecov/c/github/dudenr33/pyinstaller-versionfile/master)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/pyinstaller-versionfile)
+![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/DudeNr33/pyinstaller-versionfile)
 
 Create a windows version-file from a simple YAML file that can be used by PyInstaller.
 
@@ -59,3 +61,10 @@ It is also possible to set the version directly over the command line using the 
 create-version-file metadata.yml --outfile file_version_info.txt --version 0.8.1.5
 ```
 This can be useful if you want to use a CI build number as the version. 
+
+
+## Contributing
+
+If you think you found a bug, or have a proposal for an enhancement, do not hesitate 
+to create a new issue or submit a pull request. I will look into it as soon
+as possible.

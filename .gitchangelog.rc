@@ -1,0 +1,65 @@
+# -*- coding: utf-8; mode: python -*-
+##
+## For a fully documented configuration file refer to:
+## https://github.com/vaab/gitchangelog/blob/master/src/gitchangelog/gitchangelog.rc.reference
+##
+## Format
+##
+##   changelog: ACTION: COMMIT_MSG
+##
+## Description
+##
+##   changelog: is the marker to indicate that this commit message should be included in the changelog.
+##
+##   ACTION is one of 'change', 'fix', 'new'
+##
+##       Is WHAT the change is about.
+##
+##       'change' is for refactor, small improvement, cosmetic changes...
+##       'fix' is for bug fixes
+##       'new' is for new features, big improvement
+##
+##   COMMIT_MSG is the commit message itself.
+##
+## Example:
+##
+##   changelog: new: support of bazaar implemented
+##   changelog: change: re-indentend some lines
+##   changelog: fix: updated year of licence coverage.
+##
+
+ignore_regexps = [
+    r'^(?![cC]hangelog:).+',  ## ignore all commits that do not start with "changelog:"
+]
+
+section_regexps = [
+    ('New', [
+        r'^changelog: [nN]ew\s*:\s*([^\n]*)$',
+     ]),
+    ('Fixes', [
+        r'^changelog: [fF]ix\s*:\s*([^\n]*)$',
+     ]),
+    ('Changes', [
+        r'^changelog: [cC]hange\s*:\s*([^\n]*)$',
+     ]),
+
+    ('Other', None ## Match all lines
+     ),
+
+]
+
+body_process = ReSub(r'((^|\n)[A-Z]\w+(-\w+)*: .*(\n\s+.*)*)+$', r'') | strip
+
+subject_process = (strip |
+    ReSub(r'^[cC]hangelog: ([cC]hange|[fF]ix|[nN]ew)\s*:\s*([^\n@]*)(@[a-z]+\s+)*$', r'\2') |
+    SetIfEmpty("No commit message.") | ucfirst | final_dot)
+
+tag_filter_regexp = r'^[vV][0-9]+\.[0-9]+(\.[0-9]+)?$'
+
+unreleased_version_label = "(To be released...)"
+
+output_engine = mustache("markdown")
+
+include_merge = True  ## include merge commits in log
+
+revs = []  ## always generate a full changelog

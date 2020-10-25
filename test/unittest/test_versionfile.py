@@ -1,10 +1,10 @@
+"""
+Unit tests for creation of the versionfile itself.
+"""
 from __future__ import unicode_literals
 
 import codecs
 import os
-import subprocess
-import sys
-import tempfile
 
 import pytest
 import yaml
@@ -14,91 +14,15 @@ try:
 except ImportError:
     from yaml import Loader
 
-from pyinstaller_versionfile.create_version_file import MetaData, parse_args
+from pyinstaller_versionfile.create_version_file import MetaData, parse_args, main
 
-RESOURCE_DIR = os.path.join(os.path.dirname(__file__), "resources")
+RESOURCE_DIR = os.path.join(os.path.dirname(__file__), "../resources")
 ACCEPTANCETEST_METADATA = os.path.join(RESOURCE_DIR, "acceptancetest_metadata.yml")
 METADATA_EXT_VERSION_FILE = os.path.join(RESOURCE_DIR, "metadata_reference_to_other_file.yml")
+METADATA_WITHOUT_VERSION = os.path.join(RESOURCE_DIR, "metadata_without_version.yml")
 EXT_VERSION_FILE = os.path.join(RESOURCE_DIR, "VERSION.txt")
 TEST_APP_PY_FILE = os.path.join(RESOURCE_DIR, "testapp.py")
 TEST_APP_SPEC_FILE = os.path.join(RESOURCE_DIR, "testapp.spec")
-
-
-def get_version_number(filename):
-    from win32api import GetFileVersionInfo, LOWORD, HIWORD
-    try:
-        info = GetFileVersionInfo(filename, "\\")
-        ms = info['FileVersionMS']
-        ls = info['FileVersionLS']
-        return "{}.{}.{}.{}".format(HIWORD(ms), LOWORD(ms), HIWORD(ls), LOWORD(ls))
-    except:  # noqa
-        return None
-
-
-@pytest.fixture()
-def temp_dir():
-    tempdirobj = None
-    try:
-        tempdirobj = tempfile.TemporaryDirectory(dir=tempfile.gettempdir())
-        dirname = tempdirobj.name
-    except AttributeError:
-        # Python 2.7 does not have tempfile.TemporaryDirectory
-        dirname = tempfile.mkdtemp()
-    yield dirname
-    if tempdirobj:
-        tempdirobj.cleanup()
-    else:
-        import shutil
-        shutil.rmtree(dirname)
-
-
-@pytest.fixture()
-def temp_version_file(temp_dir):
-    return os.path.join(temp_dir, "version_file.txt")
-
-
-@pytest.mark.skipif(
-    not sys.platform.startswith("win") or os.environ.get("includeE2E", "False") != "True",
-    reason="Long running test, only possible on windows OS.")
-def test_end2end_exe_generation(temp_dir, temp_version_file):
-    """
-    Checks if pyinstaller is able to interpret the generated version file and if the generated EXE has the correct
-    version info.
-    Other attributes are not checked for.
-    """
-    with open(ACCEPTANCETEST_METADATA) as infile:
-        metadata = yaml.load(infile, Loader=Loader)
-    expected_version = metadata["Version"]
-    MetaData(ACCEPTANCETEST_METADATA).create_version_file(temp_version_file)
-    build_dir = os.path.join(temp_dir, "build")
-    out_dir = os.path.join(temp_dir, "dist")
-    returncode = subprocess.call(
-        [
-            "pyinstaller",
-            "--workpath", build_dir,
-            "--distpath", out_dir,
-            "--onefile",
-            "--version-file", temp_version_file,
-            TEST_APP_PY_FILE
-        ]
-    )
-    assert returncode == 0
-    file_version = get_version_number(os.path.join(out_dir, "testapp.exe"))
-    assert expected_version == file_version
-
-
-@pytest.mark.skipif(os.environ.get("includeE2E", "False") != "True", reason="Only possbile in tox environment.")
-def test_end2end_version_file_creation(temp_version_file):
-    returncode = subprocess.call(
-        [
-            "create-version-file",
-            ACCEPTANCETEST_METADATA,
-            "--outfile", temp_version_file,
-            "--version", "0.8.1.5"
-        ]
-    )
-    assert returncode == 0
-    assert os.path.isfile(temp_version_file)
 
 
 @pytest.mark.parametrize(
@@ -138,6 +62,25 @@ def test_file_version_product_version_from_external_file(temp_version_file):
     MetaData(METADATA_EXT_VERSION_FILE).create_version_file(outfile=temp_version_file)
     with open(EXT_VERSION_FILE) as ext_version_file:
         expected_version = ext_version_file.read().strip()
+    assert _version_is_set_correctly(temp_version_file, expected_version)
+
+
+@pytest.mark.parametrize(
+    "given_version,expected_version",
+    [
+        ("1", "1.0.0.0"),
+        ("1.2", "1.2.0.0"),
+        ("1.2.3", "1.2.3.0"),
+    ]
+)
+def test_fill_version_number_if_too_short(temp_version_file, given_version, expected_version):
+    """
+    (Issue #4)
+    PyInstaller only handles version numbers with exactly 4 places.
+    If a version number with less than four places is provided, pyinstaller-versionfile fills up the remaining places
+    with zeros: 1.2.3 will be implicitly converted to 1.2.3.0, 1.2 will become 1.2.0.0.
+    """
+    MetaData(ACCEPTANCETEST_METADATA, version=given_version).create_version_file(outfile=temp_version_file)
     assert _version_is_set_correctly(temp_version_file, expected_version)
 
 
@@ -184,3 +127,10 @@ def test_parser(parameter_to_check):
 def test_default_parser_values(parameter, expected_default_value):
     parsed = parse_args(["in.yml"])
     assert getattr(parsed, parameter) == expected_default_value
+
+
+def test_main(temp_version_file):
+    main([METADATA_EXT_VERSION_FILE, "--outfile", temp_version_file])
+    with open(EXT_VERSION_FILE) as ext_version_file:
+        expected_version = ext_version_file.read().strip()
+    assert _version_is_set_correctly(temp_version_file, expected_version)
