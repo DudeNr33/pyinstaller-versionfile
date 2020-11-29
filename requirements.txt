@@ -1,3 +1,4 @@
 Jinja2
 PyYAML
 packaging
+pathlib; python_version < '3'

@@ -43,7 +43,7 @@ setuptools.setup(
     include_package_data=True,
     entry_points={
           'console_scripts': [
-              'create-version-file = pyinstaller_versionfile.create_version_file:main'
+              'create-version-file = pyinstaller_versionfile.main:main'
           ]
       },
     install_requires=requirements,
