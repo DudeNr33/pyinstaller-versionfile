@@ -10,8 +10,7 @@ from .writer import Writer
 
 def main(args=None):
     args = args or parse_args(args)
-    metadata = MetaData()
-    metadata.load(args.metadata_file)
+    metadata = MetaData.from_file(args.metadata_file)
     metadata.validate()
     if args.version:
         metadata.set_version(args.version)

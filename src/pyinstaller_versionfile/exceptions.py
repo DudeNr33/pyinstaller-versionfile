@@ -2,6 +2,11 @@
 Exception classes for pyinstaller-versionfile.
 """
 
+class InputError(Exception):
+    """
+    The given metadata input file is not as expected.
+    """
+
 
 class UsageError(Exception):
     """
@@ -9,7 +14,13 @@ class UsageError(Exception):
     """
 
 
-class InternalUsageError(UsageError):
+class ValidationError(Exception):
+    """
+    Input data is not valid.
+    """
+
+
+class InternalUsageError(Exception):
     """
     Intended to be used in places where the error is not caused by the end user, but by a programming error.
     """
