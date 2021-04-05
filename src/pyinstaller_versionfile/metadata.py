@@ -48,14 +48,14 @@ class MetaData(object):
         try:
             with codecs.open(filepath, encoding="utf-8") as infile:
                 data = yaml.load(infile, Loader=Loader)
-        except IsADirectoryError as err:
-            raise exceptions.InputError("Specified filepath {} is a directory, not a file".format(filepath)) from err
-        except FileNotFoundError as err:
-            raise exceptions.InputError("File {} does not exist".format(filepath)) from err
+        except IsADirectoryError:
+            raise exceptions.InputError("Specified filepath {} is a directory, not a file".format(filepath))
+        except FileNotFoundError:
+            raise exceptions.InputError("File {} does not exist".format(filepath))
         except IOError as err:
-            raise exceptions.InputError("Failed to read input from file") from err
+            raise exceptions.InputError("Failed to read input from file: {}".format(err))
         except yaml.scanner.ScannerError as err:
-            raise exceptions.InputError("Failed to read YAML data due to scanner error") from err
+            raise exceptions.InputError("Failed to read YAML data due to scanner error: {}".format(err))
         if not isinstance(data, dict):
             raise exceptions.InputError("Input file must contain a mapping, but is: {}".format(type(data)))
         version = data.get("Version", "0.0.0.0")
