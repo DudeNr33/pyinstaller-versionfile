@@ -4,20 +4,16 @@ Main file for pyinstaller-versionfile, which is the entrypoint for the command l
 
 import argparse
 
-from .metadata import MetaData
-from .writer import Writer
+import pyinstaller_versionfile
 
 
 def main(args=None):
     args = args or parse_args(args)
-    metadata = MetaData.from_file(args.metadata_file)
-    metadata.validate()
-    if args.version:
-        metadata.set_version(args.version)
-    metadata.sanitize()
-    writer = Writer(metadata)
-    writer.render()
-    writer.save(args.outfile)
+    pyinstaller_versionfile.create_versionfile_from_input_file(
+        output_file=args.outfile,
+        input_file=args.metadata_file,
+        version=args.version
+    )
 
 
 def parse_args(args):

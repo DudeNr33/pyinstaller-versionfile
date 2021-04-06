@@ -43,11 +43,10 @@ class Writer(object):
             template = Template(infile.read())
         try:
             self._content = template.render(**data)
-        except UndefinedError:
-            # pylint: disable=raise-missing-from
+        except UndefinedError as err:
             raise InternalUsageError(
                 "Could not render template because parameters are missing (jinja2 UndefinedError)."
-            )
+            ) from err
 
     def save(self, filepath):
         """

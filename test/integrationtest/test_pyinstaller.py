@@ -13,7 +13,7 @@ try:
 except ImportError:
     import mock
 
-from pyinstaller_versionfile.main import main
+from pyinstaller_versionfile.__main__ import main
 
 RESOURCE_DIR = os.path.join(os.path.dirname(__file__), "../resources")
 ACCEPTANCETEST_METADATA = os.path.join(RESOURCE_DIR, "acceptancetest_metadata.yml")

@@ -3,17 +3,9 @@ Author: Andreas Finkler
 
 Unit tests for pyinstaller_versionfile.main
 """
-import os
-
 import pytest
 
-from pyinstaller_versionfile.main import parse_args
-
-
-RESOURCE_DIR = os.path.join(os.path.dirname(__file__), "../resources")
-ACCEPTANCETEST_METADATA = os.path.join(RESOURCE_DIR, "acceptancetest_metadata.yml")
-METADATA_EXT_VERSION_FILE = os.path.join(RESOURCE_DIR, "metadata_reference_to_other_file.yml")
-EXT_VERSION_FILE = os.path.join(RESOURCE_DIR, "VERSION.txt")
+from pyinstaller_versionfile.__main__ import parse_args
 
 
 @pytest.mark.parametrize(
@@ -61,16 +53,3 @@ def test_parser_missing_filename():
 
     with pytest.raises(SystemExit):
         _ = parse_args(args)
-
-
-def test_main_implicit_version():
-    """
-    The main function needs to call the correct functions on the MetaData and Writer classes.
-    """
-
-
-def test_main_explicit_version():
-    """
-    The main function needs to call the correct functions on the MetaData and Writer classes and overwrite the
-    version given in the metadata file.
-    """

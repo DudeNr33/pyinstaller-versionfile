@@ -3,6 +3,7 @@ load-plugins=pylint.extensions.mccabe
 
 [DESIGN]
 max-complexity=10
+min-similarity-lines=6
 
 [FORMAT]
 max-line-length=120

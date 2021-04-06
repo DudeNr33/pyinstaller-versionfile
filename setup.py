@@ -43,12 +43,11 @@ setuptools.setup(
     include_package_data=True,
     entry_points={
           'console_scripts': [
-              'create-version-file = pyinstaller_versionfile.main:main'
+              'create-version-file = pyinstaller_versionfile.__main__:main'
           ]
       },
     install_requires=requirements,
     classifiers=[
-        "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: Microsoft :: Windows",
