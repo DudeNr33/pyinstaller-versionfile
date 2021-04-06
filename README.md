@@ -15,6 +15,9 @@ updated, is a bit cumbersome.
 This package aims to make the creation of such a version file easier.
 
 ## Usage
+pyinstaller-versionfile provides both a command line interface and a functional API.
+
+### Command line interface
 pyinstaller-versionfile provides a command line interface to convert a simple YAML file into a version-file suitable
 to pass to PyInstaller via the `--version-file=` option.
 
@@ -37,11 +40,11 @@ create-version-file metadata.yml --outfile file_version_info.txt
 where metadata.yml is the YAML configuration file from above.
 
 
-### Extracting Version Information
+#### Extracting Version Information
 As an alternative to specifying the version directly in the YAML file, there are two alternatives which may be more
 suitable, depending on the use case:
 
-#### Link to an External File
+##### Link to an External File
 Instead of writing the version string directly into the YAML file, you can also specify the (relative) path to another
 file. Note that this file must only contain the version string and nothing else.
 
@@ -55,13 +58,41 @@ OriginalFilename: SimpleApp.exe
 ProductName: Simple App
 ```
 
-#### Setting the Version from the Command Line
+##### Setting the Version from the Command Line
 It is also possible to set the version directly over the command line using the `--version` option:
 ```cmd
 create-version-file metadata.yml --outfile file_version_info.txt --version 0.8.1.5
 ```
 This can be useful if you want to use a CI build number as the version. 
 
+### Functional API
+You can also use pyinstaller-versionfile from your own python code by directly calling the functional API.
+``` Python
+import pyinstaller_versionfile
+
+pyinstaller_versionfile.create_versionfile_from_input_file(
+    output_file="versionfile.txt",
+    input_file="metadata.yml",
+    version="1.2.3.4"  # optional, can be set to overwrite version information (equivalent to --version when using the CLI)
+)
+```
+
+It is not necessary to use a file as input, you can also directly specify the desired values.
+All of them are optional and will be filled with placeholder values if not specified.
+``` Python
+import pyinstaller_versionfile
+
+pyinstaller_versionfile.create_versionfile(
+    output_file="versionfile.txt",
+    version="1.2.3.4",
+    company_name="My Imaginary Company",
+    file_description="Simple App",
+    internal_name="Simple App",
+    legal_copyright="© My Imaginary Company. All rights reserved.",
+    original_filename="SimpleApp.exe",
+    product_name="Simple App"
+)
+```
 
 ## Contributing
 

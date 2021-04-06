@@ -8,8 +8,12 @@ import sys
 
 import pytest
 import yaml
+try:
+    from unittest import mock
+except ImportError:
+    import mock
 
-from pyinstaller_versionfile.create_version_file import MetaData
+from pyinstaller_versionfile.__main__ import main
 
 RESOURCE_DIR = os.path.join(os.path.dirname(__file__), "../resources")
 ACCEPTANCETEST_METADATA = os.path.join(RESOURCE_DIR, "acceptancetest_metadata.yml")
@@ -31,7 +35,11 @@ def test_end2end_exe_generation(tmpdir, temp_version_file):
     with open(ACCEPTANCETEST_METADATA) as infile:
         metadata = yaml.load(infile, Loader=yaml.CLoader)
     expected_version = metadata["Version"]
-    MetaData(ACCEPTANCETEST_METADATA).create_version_file(temp_version_file)
+    args = mock.Mock()
+    args.metadata_file = ACCEPTANCETEST_METADATA
+    args.outfile = temp_version_file
+    args.version = False
+    main(args)
     build_dir = os.path.join(tmpdir, "build")
     out_dir = os.path.join(tmpdir, "dist")
     returncode = subprocess.call(
@@ -50,7 +58,7 @@ def test_end2end_exe_generation(tmpdir, temp_version_file):
 
 
 def get_version_number(filename):
-    # pylint: disable=no-name-in-module, import-outside-toplevel
+    # pylint: disable=no-name-in-module, import-outside-toplevel, import-error
     from win32api import GetFileVersionInfo, LOWORD, HIWORD
     try:
         info = GetFileVersionInfo(filename, "\\")
