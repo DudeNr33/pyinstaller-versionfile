@@ -44,6 +44,8 @@ jobs:
   integrationtest:
 
     runs-on: windows-latest
+    needs: unittest
+
     steps:
       - uses: actions/checkout@v2
       - name: Setup Python
