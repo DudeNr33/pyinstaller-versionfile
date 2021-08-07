@@ -11,7 +11,7 @@ RESOURCE_DIR = os.path.join(os.path.dirname(__file__), "../resources")
 ACCEPTANCETEST_METADATA = os.path.join(RESOURCE_DIR, "acceptancetest_metadata.yml")
 
 
-@pytest.mark.skipif(os.environ.get("includeE2E", "False") != "True", reason="Only possbile in tox environment.")
+@pytest.mark.skipif(os.environ.get("includeE2E", "False").lower() != "true", reason="Only possbile in tox environment.")
 def test_end2end_version_file_creation(temp_version_file):
     returncode = subprocess.call(
         [

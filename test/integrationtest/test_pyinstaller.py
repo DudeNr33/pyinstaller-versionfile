@@ -23,7 +23,7 @@ TEST_APP_SPEC_FILE = os.path.join(RESOURCE_DIR, "testapp.spec")
 
 @pytest.mark.skipif(
     not sys.platform.startswith("win")
-    or os.environ.get("includeE2E", "False") != "True",
+    or os.environ.get("includeE2E", "False").lower() != "true",
     reason="Long running test, only possible on windows OS."
 )
 def test_end2end_exe_generation(tmpdir, temp_version_file):
