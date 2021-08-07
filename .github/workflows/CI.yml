@@ -5,7 +5,7 @@ name: Continuous Integration
 
 on:
   push:
-    branches: '*'  # change to just "master" later on
+    branches: [ master ]
   pull_request:
     branches: [ master ]
 
