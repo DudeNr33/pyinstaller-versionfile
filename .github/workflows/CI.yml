@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: 3.8
       - name: Run tox with tox-gh-actions
-        uses: ymyzk/tox-gh-actions@main
+        uses: ymyzk/tox-gh-actions@v0.1
         with:
           tox-args: '-e lint'
 
@@ -37,6 +37,6 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Run tox with tox-gh-actions
-        uses: ymyzk/tox-gh-actions@main
+        uses: ymyzk/tox-gh-actions@v0.1
 
 # TODO: add integration test stage on windows
