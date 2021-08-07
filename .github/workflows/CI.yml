@@ -41,4 +41,18 @@ jobs:
       - name: Run tests
         run: tox
 
-# TODO: add integration test stage on windows
+  integrationtest:
+
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install dependencies
+        run: pip install tox
+      - name: Run integration tests
+        run: tox -e py39-tests-win
+        env:
+          includeE2E: True
