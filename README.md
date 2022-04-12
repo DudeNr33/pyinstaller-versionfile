@@ -19,7 +19,7 @@ The key/value pairs that be specified in the version file and [their official me
 | Parameter Name | Description |
 |:---:|---|
 | CompanyName | Name of the company that produced the file, for example, "My Imaginary Company, Inc.". |
-| FileDescriptionFile | Description to be presented to users. It may be displayed when the user is choosing files to install. For example, "A simple app that does simple things.". |
+| FileDescription | Description to be presented to users. It may be displayed when the user is choosing files to install. For example, "A simple app that does simple things.". |
 | InternalName | Internal name of the file. If the file has no internal name, this string should be the original filename, without extension. For example, 'Simple App". |
 | LegalCopyright | Copyright notices that apply to the file. This should include the full text of all notices, legal symbols, copyright dates, and so on. For example, "Copyright © 2000-2022, My Imaginary Company, Inc. All rights reserved.". |
 | OriginalFilename | Original name of the file, not including a path. This information enables an application to determine whether a file has been renamed by a user. For example, "SimpleApp.exe". |
