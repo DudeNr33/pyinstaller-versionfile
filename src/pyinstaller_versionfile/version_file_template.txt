@@ -39,6 +39,6 @@ VSVersionInfo(
         StringStruct(u'ProductName', u'{{ProductName}}'),
         StringStruct(u'ProductVersion', u'{{Version}}')])
       ]), 
-    VarFileInfo([VarStruct(u'Translation', [1033, 1200])])
+    VarFileInfo([VarStruct(u'Translation', [{{ Translation|join(", ") }}])])
   ]
 )
