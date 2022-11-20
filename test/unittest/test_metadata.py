@@ -116,6 +116,7 @@ def test_load_file_does_not_exist_raises_input_error():
         ("legal_copyright", ""),
         ("original_filename", ""),
         ("product_name", ""),
+        ("translations", [1033, 1200]),
     ],
 )
 def test_from_file_missing_parameters_are_given_default_values(
@@ -226,3 +227,19 @@ def test_set_version_invalid_input_raises_validation_error():
     metadata = MetaData(version="0.8.1.5")
     with pytest.raises(exceptions.ValidationError):
         metadata.set_version("this is not a valid version string")
+
+
+def test_set_translations():
+    """
+    It is possible to set different translations / languages for the file.
+    See https://learn.microsoft.com/en-us/windows/win32/menurc/varfileinfo-block#remarks
+    for possible values of langID and charsetID
+    """
+    testfile = TEST_DATA / "metadata_with_translations.yml"
+    metadata = MetaData.from_file(testfile)
+    assert metadata.translations == [
+        0,     # langID: language independent
+        1200,  # charsetID: Unicode
+        1033,  # langID: U.S. English
+        1252,  # charsetID: Multilingual
+    ]

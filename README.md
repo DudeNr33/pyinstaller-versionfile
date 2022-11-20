@@ -24,6 +24,7 @@ The key/value pairs that be specified in the version file and [their official me
 | LegalCopyright | Copyright notices that apply to the file. This should include the full text of all notices, legal symbols, copyright dates, and so on. For example, "Copyright © 2000-2022, My Imaginary Company, Inc. All rights reserved.". |
 | OriginalFilename | Original name of the file, not including a path. This information enables an application to determine whether a file has been renamed by a user. For example, "SimpleApp.exe". |
 | ProductName | Name of the product with which the file is distributed, for example, "Simple App". |
+| Translation | Combinations of language and character sets supported by the application. See [the documentation](https://learn.microsoft.com/en-us/windows/win32/menurc/varfileinfo-block#remarks) for the codes to use. Multiple values can be specified. |
 
 ## Usage
 pyinstaller-versionfile provides both a command line interface and a functional API.
@@ -41,8 +42,13 @@ InternalName: Simple App
 LegalCopyright: © My Imaginary Company. All rights reserved.
 OriginalFilename: SimpleApp.exe
 ProductName: Simple App
+Translation:
+  - langID: 0
+    charsetID: 1200
+  - langID: 1033
+    charsetID: 1252
 ```
-The encoding must be UTF-8.
+The encoding must be UTF-8. All fields are optional, you can choose to specify only those that are of interest to you.
 
 To create version-file from this, simple run:
 ```cmd

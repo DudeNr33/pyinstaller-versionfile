@@ -3,6 +3,7 @@ Author: Andreas Finkler
 """
 import codecs
 import re
+import itertools
 # noinspection PyCompatibility
 from pathlib import Path
 
@@ -20,6 +21,7 @@ class MetaData(object):
     Read and validate the metadata provided for versionfile generation.
     """
     placeholder_value = ""  # value to use if nothing was specified
+    default_translations = [1033, 1200]
 
     # pylint: disable=too-many-arguments
     def __init__(
@@ -30,7 +32,8 @@ class MetaData(object):
         internal_name=None,
         legal_copyright=None,
         original_filename=None,
-        product_name=None
+        product_name=None,
+        translations=None
     ):
         self.version = version or "0.0.0.0"
         self.company_name = company_name or self.placeholder_value
@@ -39,6 +42,7 @@ class MetaData(object):
         self.legal_copyright = legal_copyright or self.placeholder_value
         self.original_filename = original_filename or self.placeholder_value
         self.product_name = product_name or self.placeholder_value
+        self.translations = translations or self.default_translations
 
     @classmethod
     def from_file(cls, filepath):
@@ -49,19 +53,20 @@ class MetaData(object):
             with codecs.open(filepath, encoding="utf-8") as infile:
                 data = yaml.load(infile, Loader=Loader)
         except IsADirectoryError as err:
-            raise exceptions.InputError("Specified filepath {} is a directory, not a file".format(filepath)) from err
+            raise exceptions.InputError(f"Specified filepath {filepath} is a directory, not a file") from err
         except FileNotFoundError as err:
-            raise exceptions.InputError("File {} does not exist".format(filepath)) from err
+            raise exceptions.InputError(f"File {filepath} does not exist") from err
         except IOError as err:
             raise exceptions.InputError("Failed to read input from file") from err
         except yaml.scanner.ScannerError as err:
             raise exceptions.InputError("Failed to read YAML data due to scanner error") from err
         if not isinstance(data, dict):
-            raise exceptions.InputError("Input file must contain a mapping, but is: {}".format(type(data)))
+            raise exceptions.InputError(f"Input file must contain a mapping, but is: {type(data)}")
         version = data.get("Version", "0.0.0.0")
         path = (Path(filepath).parent/version)
         if path.is_file():
             version = path.read_text().strip()
+        translations = cls._get_translations(data)
         return cls(
             version=version,
             company_name=data.get("CompanyName"),
@@ -70,7 +75,19 @@ class MetaData(object):
             legal_copyright=data.get("LegalCopyright"),
             original_filename=data.get("OriginalFilename"),
             product_name=data.get("ProductName"),
+            translations=translations,
         )
+
+    @classmethod
+    def _get_translations(cls, data):
+        input_data = data.get("Translation")
+        if not input_data:
+            return cls.default_translations
+        # The version file requires a flat list, where the first two values form the first
+        # pair of language and charset, the third and fourth form the second pair, and so on.
+        # For better readability the metadata file uses a list of dictionaries here, so we have
+        # to flatten it first
+        return list(itertools.chain(*[(d["langID"], d["charsetID"]) for d in input_data]))
 
     def set_version(self, version_string):
         """
@@ -90,8 +107,8 @@ class MetaData(object):
         version_regex = r"\d+(\.\d+){0,3}"
         if not re.fullmatch(pattern=version_regex, string=version):
             raise exceptions.ValidationError(
-                "Provided version {} is not valid. " \
-                "Valid versions must contain four places with only digits.".format(version)
+                f"Provided version {version} is not valid. " \
+                "Valid versions must contain four places with only digits."
             )
 
     def sanitize(self):
@@ -105,7 +122,8 @@ class MetaData(object):
             missing_places = required_length - version_length
             self.version += ".0" * missing_places
         for key, value in self.__dict__.items():
-            setattr(self, key, value.strip())
+            if isinstance(value, str):
+                setattr(self, key, value.strip())
 
     def to_dict(self):
         """
@@ -119,4 +137,5 @@ class MetaData(object):
             "LegalCopyright": self.legal_copyright,
             "OriginalFilename": self.original_filename,
             "ProductName": self.product_name,
+            "Translation": self.translations,
         }
