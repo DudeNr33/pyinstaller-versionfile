@@ -16,15 +16,15 @@ This package aims to make the creation of such a version file easier.
 
 The key/value pairs that be specified in the version file and [their official meaning](https://docs.microsoft.com/en-us/windows/win32/menurc/stringfileinfo-block) are shown the following table:
 
-| Parameter Name | Description |
-|:---:|---|
-| CompanyName | Name of the company that produced the file, for example, "My Imaginary Company, Inc.". |
-| FileDescription | Description to be presented to users. It may be displayed when the user is choosing files to install. For example, "A simple app that does simple things.". |
-| InternalName | Internal name of the file. If the file has no internal name, this string should be the original filename, without extension. For example, 'Simple App". |
-| LegalCopyright | Copyright notices that apply to the file. This should include the full text of all notices, legal symbols, copyright dates, and so on. For example, "Copyright © 2000-2022, My Imaginary Company, Inc. All rights reserved.". |
-| OriginalFilename | Original name of the file, not including a path. This information enables an application to determine whether a file has been renamed by a user. For example, "SimpleApp.exe". |
-| ProductName | Name of the product with which the file is distributed, for example, "Simple App". |
-| Translation | Combinations of language and character sets supported by the application. See [the documentation](https://learn.microsoft.com/en-us/windows/win32/menurc/varfileinfo-block#remarks) for the codes to use. Multiple values can be specified. |
+|  Parameter Name  | Description                                                                                                                                                                                                                                 |
+|:----------------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|   CompanyName    | Name of the company that produced the file, for example, "My Imaginary Company, Inc.".                                                                                                                                                      |
+| FileDescription  | Description to be presented to users. It may be displayed when the user is choosing files to install. For example, "A simple app that does simple things.".                                                                                 |
+|   InternalName   | Internal name of the file. If the file has no internal name, this string should be the original filename, without extension. For example, 'Simple App".                                                                                     |
+|  LegalCopyright  | Copyright notices that apply to the file. This should include the full text of all notices, legal symbols, copyright dates, and so on. For example, "Copyright © 2000-2022, My Imaginary Company, Inc. All rights reserved.".               |
+| OriginalFilename | Original name of the file, not including a path. This information enables an application to determine whether a file has been renamed by a user. For example, "SimpleApp.exe".                                                              |
+|   ProductName    | Name of the product with which the file is distributed, for example, "Simple App".                                                                                                                                                          |
+|   Translation    | Combinations of language and character sets supported by the application. See [the documentation](https://learn.microsoft.com/en-us/windows/win32/menurc/varfileinfo-block#remarks) for the codes to use. Multiple values can be specified. |
 
 ## Usage
 pyinstaller-versionfile provides both a command line interface and a functional API.
@@ -107,7 +107,8 @@ pyinstaller_versionfile.create_versionfile(
     internal_name="Simple App",
     legal_copyright="© My Imaginary Company. All rights reserved.",
     original_filename="SimpleApp.exe",
-    product_name="Simple App"
+    product_name="Simple App",
+    translations=[0, 1200]
 )
 ```
 

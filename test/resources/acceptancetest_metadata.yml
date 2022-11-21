@@ -5,3 +5,8 @@ InternalName: Internal Acceptance Test
 LegalCopyright: © My Imaginary Company. All rights reserved.
 OriginalFilename: acceptancetest_metadata
 ProductName: Acceptance Test Unit Test
+Translation:
+  - langID: 0
+    charsetID: 1252
+  - langID: 1031
+    charsetID: 1200

@@ -16,6 +16,7 @@ def create_versionfile(
     legal_copyright=None,
     original_filename=None,
     product_name=None,
+    translations=None,
 ):  # pylint: disable=too-many-arguments
     """
     Create a new versionfile from the information given.
@@ -30,15 +31,12 @@ def create_versionfile(
         legal_copyright=legal_copyright,
         original_filename=original_filename,
         product_name=product_name,
+        translations=translations,
     )
     __create(metadata, output_file)
 
 
-def create_versionfile_from_input_file(
-    output_file,
-    input_file,
-    version=None
-):
+def create_versionfile_from_input_file(output_file, input_file, version=None):
     """
     Create a new versionfile from metadata specified in input_file.
     If the version argument is set, the version specified in input_file will be overwritten with the value
