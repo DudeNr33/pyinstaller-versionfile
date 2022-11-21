@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.1.1 (2022-11-21)
+
+### Fix
+
+* Add new `translations` parameter to functional API. [DudeNr33]
+
 ## v2.1.0 (2022-11-20)
 
 ### New
