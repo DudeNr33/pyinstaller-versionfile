@@ -15,6 +15,19 @@ except ImportError:  # pragma: no cover
 
 from pyinstaller_versionfile import exceptions
 
+import sys
+if sys.version_info[:2] >= (3, 8):
+    # TODO: Import directly (no need for conditional) when `python_requires = >= 3.8`
+    from importlib.metadata import (
+        PackageNotFoundError, 
+        distribution
+      )  # pragma: no cover
+else:
+    from importlib_metadata import (
+        PackageNotFoundError, 
+        distribution
+      )  # pragma: no cover
+
 
 class MetaData(object):
     """
@@ -45,6 +58,43 @@ class MetaData(object):
         self.translations = translations or self.default_translations
 
     @classmethod
+    def _generate(cls, data: dict) -> 'MetaData':
+        translations = cls._get_translations(data)
+        return cls(
+            version=data.get("Version"),
+            company_name=data.get("CompanyName"),
+            file_description=data.get("FileDescription"),
+            internal_name=data.get("InternalName"),
+            legal_copyright=data.get("LegalCopyright"),
+            original_filename=data.get("OriginalFilename"),
+            product_name=data.get("ProductName"),
+            translations=translations,
+        )
+
+    @classmethod
+    def from_distribution(cls, distname: str):
+        """
+        Factory method to extract metadata from installed packages.
+        """
+        try:
+            dist = distribution(distname)
+            meta = dist.metadata
+        except PackageNotFoundError as err:  # pragma: no cover
+            raise exceptions.InputError(f"Distribution {distname} not found") from err
+        
+        data = dict(
+            Version=meta.get("Version", None),
+            CompanyName=meta.get("Author", None),
+            FileDescription=meta.get("Summary", None),
+            InternalName=meta.get("Name", None),
+            LegalCopyright=meta.get("License", None),
+            OriginalFilename=meta.get("Name", None),
+            product_name=meta.get("Name", None),
+            translations=meta.get("translations", None),
+        )
+        return cls._generate(data)
+
+    @classmethod
     def from_file(cls, filepath):
         """
         Factory method to create a MetaData instance from a file.
@@ -66,17 +116,8 @@ class MetaData(object):
         path = Path(filepath).parent/version
         if path.is_file():
             version = path.read_text().strip()
-        translations = cls._get_translations(data)
-        return cls(
-            version=version,
-            company_name=data.get("CompanyName"),
-            file_description=data.get("FileDescription"),
-            internal_name=data.get("InternalName"),
-            legal_copyright=data.get("LegalCopyright"),
-            original_filename=data.get("OriginalFilename"),
-            product_name=data.get("ProductName"),
-            translations=translations,
-        )
+        data.update({"Version": version})
+        return cls._generate(data)
 
     @classmethod
     def _get_translations(cls, data):
