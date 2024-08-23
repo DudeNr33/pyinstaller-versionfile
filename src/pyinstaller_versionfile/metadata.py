@@ -89,8 +89,8 @@ class MetaData(object):
             InternalName=meta.get("Name", None),
             LegalCopyright=meta.get("License", None),
             OriginalFilename=meta.get("Name", None),
-            product_name=meta.get("Name", None),
-            translations=meta.get("translations", None),
+            ProductName=meta.get("Name", None),
+            translations=meta.get("Translation", None),
         )
         return cls._generate(data)
 
