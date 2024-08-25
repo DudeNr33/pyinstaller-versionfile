@@ -63,7 +63,7 @@ class MetaData(object):
         if not isinstance(data, dict):
             raise exceptions.InputError(f"Input file must contain a mapping, but is: {type(data)}")
         version = data.get("Version", "0.0.0.0")
-        path = (Path(filepath).parent/version)
+        path = Path(filepath).parent/version
         if path.is_file():
             version = path.read_text().strip()
         translations = cls._get_translations(data)
