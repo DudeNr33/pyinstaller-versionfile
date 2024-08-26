@@ -7,6 +7,11 @@ import itertools
 # noinspection PyCompatibility
 from pathlib import Path
 
+from importlib.metadata import (
+    PackageNotFoundError,
+    distribution
+)
+
 import yaml
 try:
     from yaml import CLoader as Loader
@@ -15,10 +20,6 @@ except ImportError:  # pragma: no cover
 
 from pyinstaller_versionfile import exceptions
 
-from importlib.metadata import (
-    PackageNotFoundError, 
-    distribution
-)
 
 class MetaData(object):
     """
@@ -72,7 +73,7 @@ class MetaData(object):
             meta = dist.metadata
         except PackageNotFoundError as err:  # pragma: no cover
             raise exceptions.InputError(f"Distribution {distname} not found") from err
-        
+
         company = [
             meta.get("Author", None),
             meta.get("Author-email", None),
@@ -82,16 +83,16 @@ class MetaData(object):
         ]
         company = ", ".join([c for c in company if c])
 
-        data = dict(
-            Version=meta.get("Version", None),
-            CompanyName=company,
-            FileDescription=meta.get("Summary", None),
-            InternalName=meta.get("Name", None),
-            LegalCopyright=meta.get("License", None),
-            OriginalFilename=meta.get("Name", None),
-            ProductName=meta.get("Name", None),
-            translations=meta.get("Translation", None),
-        )
+        data = dict({
+            "Version": meta.get("Version", None),
+            "CompanyName": company,
+            "FileDescription": meta.get("Summary", None),
+            "InternalName": meta.get("Name", None),
+            "LegalCopyright": meta.get("License", None),
+            "OriginalFilename": meta.get("Name", None),
+            "ProductName": meta.get("Name", None),
+            "translations": meta.get("Translation", None)
+        })
         return cls._generate(data)
 
     @classmethod
