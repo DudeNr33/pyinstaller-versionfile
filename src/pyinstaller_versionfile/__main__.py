@@ -58,7 +58,7 @@ def main(args=None):
 def parse_args(args):
     parser = argparse.ArgumentParser(description="Create a version file for PyInstaller from a YAML metadata file.")
     parser.add_argument("metadata_source", help="Either the path to the YAML metadata file or the name of the installed distribution.")
-    parser.add_argument("--outfile", default="./file_version_info.txt", help="Resulting version file for PyInstaller")
+    parser.add_argument("--outfile", default="./version_file.txt", help="Resulting version file for PyInstaller")
     parser.add_argument("--version", default=None, help="Override Version information given in metadata file")
     return parser.parse_args(args)
 
