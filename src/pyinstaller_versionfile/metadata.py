@@ -64,7 +64,7 @@ class MetaData(object):
         )
 
     @classmethod
-    def from_distribution(cls, distname: str):
+    def from_distribution(cls, distname: str) -> 'MetaData':
         """
         Factory method to extract metadata from installed packages.
         """
@@ -91,12 +91,12 @@ class MetaData(object):
             "LegalCopyright": meta.get("License", None),
             "OriginalFilename": meta.get("Name", None),
             "ProductName": meta.get("Name", None),
-            "translations": meta.get("Translation", None)
+            "Translation": meta.get("Translation", None)
         })
         return cls._generate(data)
 
     @classmethod
-    def from_file(cls, filepath):
+    def from_file(cls, filepath: str) -> 'MetaData':
         """
         Factory method to create a MetaData instance from a file.
         """
