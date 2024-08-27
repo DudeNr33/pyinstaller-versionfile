@@ -50,16 +50,16 @@ class MetaData(object):
         self.translations = translations or self.default_translations
 
     @classmethod
-    def _generate(cls, data: dict) -> 'MetaData':
-        translations = cls._get_translations(data)
+    def from_dict(cls, metadata: dict) -> 'MetaData':
+        translations = cls._get_translations(metadata)
         return cls(
-            version=data.get("Version"),
-            company_name=data.get("CompanyName"),
-            file_description=data.get("FileDescription"),
-            internal_name=data.get("InternalName"),
-            legal_copyright=data.get("LegalCopyright"),
-            original_filename=data.get("OriginalFilename"),
-            product_name=data.get("ProductName"),
+            version=metadata.get("Version"),
+            company_name=metadata.get("CompanyName"),
+            file_description=metadata.get("FileDescription"),
+            internal_name=metadata.get("InternalName"),
+            legal_copyright=metadata.get("LegalCopyright"),
+            original_filename=metadata.get("OriginalFilename"),
+            product_name=metadata.get("ProductName"),
             translations=translations,
         )
 
@@ -93,7 +93,7 @@ class MetaData(object):
             "ProductName": meta.get("Name", None),
             "Translation": meta.get("Translation", None)
         })
-        return cls._generate(data)
+        return cls.from_dict(data)
 
     @classmethod
     def from_file(cls, filepath: str) -> 'MetaData':
@@ -118,7 +118,7 @@ class MetaData(object):
         if path.is_file():
             version = path.read_text().strip()
         data.update({"Version": version})
-        return cls._generate(data)
+        return cls.from_dict(data)
 
     @classmethod
     def _get_translations(cls, data):
