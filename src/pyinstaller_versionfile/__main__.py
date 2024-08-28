@@ -17,7 +17,7 @@ def main(args=None):
             input_file=args.metadata_source,
             version=args.version
         )
-    elif args.source_format in ['distribution', 'dist']:
+    elif args.source_format in ["distribution", "dist"]:
         # from_distribution
         pyinstaller_versionfile.create_versionfile_from_distribution(
             output_file=args.outfile,
