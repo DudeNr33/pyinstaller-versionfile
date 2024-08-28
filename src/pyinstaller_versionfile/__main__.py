@@ -25,8 +25,8 @@ def main(args=None):
             version=args.version
         )
     else:
-        # because of 'choises' in --source-format this case should not be entered 
-        raise exceptions.InternalUsageError(f"Unexpected behaviour in main. Please check parser definition.")
+        # because of 'choises' in --source-format this case should not be entered
+        raise exceptions.InternalUsageError("Unexpected behaviour in main. Please check parser definition.")
 
     sys.exit(0)
 
