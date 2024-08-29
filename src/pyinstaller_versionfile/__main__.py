@@ -28,8 +28,6 @@ def main(args=None):
         # because of 'choises' in --source-format this case should not be entered
         raise exceptions.InternalUsageError("Unexpected behaviour in main. Please check parser definition.")
 
-    sys.exit(0)
-
 
 def parse_args(args):
     parser = argparse.ArgumentParser(description="Create a version file for PyInstaller from a YAML metadata file.")
