@@ -2,7 +2,6 @@
 Main file for pyinstaller-versionfile, which is the entrypoint for the command line script.
 """
 import argparse
-import sys
 
 from pyinstaller_versionfile import exceptions
 import pyinstaller_versionfile
