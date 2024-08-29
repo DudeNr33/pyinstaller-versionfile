@@ -48,6 +48,21 @@ def create_versionfile_from_input_file(output_file, input_file, version=None):
     __create(metadata, output_file)
 
 
+def create_versionfile_from_distribution(output_file, distname, version=None):
+    """
+    Create a new versionfile from metadata that are stored in distribution
+    addressed by `distname`. If the `version` argument is set, the version specified
+    in distribution will be overwritten.
+
+    This function can be helpful with regard to the automatic versioning of
+    packages.
+    """
+    metadata = MetaData.from_distribution(distname)
+    if version:
+        metadata.set_version(version)
+    __create(metadata, output_file)
+
+
 def __create(metadata, output_file):
     metadata.validate()
     metadata.sanitize()

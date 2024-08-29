@@ -21,7 +21,7 @@ def test_parser_default_values(parameter, expected_default_value):
 
 @pytest.mark.parametrize(
     "parameter_to_check", [
-        "metadata_file",
+        "metadata_source",
         "version",
         "outfile"
     ]
@@ -31,12 +31,12 @@ def test_parser_valid_parameters(parameter_to_check):
     Parameters must be stored in the correct attributes of the args namespace after parsing.
     """
     parameters = dict(
-        metadata_file="in.yml",
+        metadata_source="in.yml",
         version="123.123.123.123",
         outfile="out.txt"
     )
     args = [
-        parameters["metadata_file"],
+        parameters["metadata_source"],
         "--version", parameters["version"],
         "--outfile", parameters["outfile"]
     ]
