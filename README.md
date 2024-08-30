@@ -6,10 +6,13 @@
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/pyinstaller-versionfile)
 ![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/DudeNr33/pyinstaller-versionfile)
 
-Create a windows version-file from a simple YAML file that can be used by PyInstaller.
+Create a windows version-file, known as VERSIONINFO resource, from metadata stored
+in a simple self-written YAML file or obtained from an installed distribution.
+This file can be used by PyInstaller to add the version resource in the bundled
+application.
 
 ## Background
-Pyinstaller provides a way to [capture Windows version data](https://pyinstaller.readthedocs.io/en/stable/usage.html#capturing-windows-version-data)
+PyInstaller provides a way to [capture Windows version data](https://pyinstaller.readthedocs.io/en/stable/usage.html#capturing-windows-version-data)
 through a so called _version-file_. The process of crafting such a version file, and especially keeping the version number
 updated, is a bit cumbersome. 
 This package aims to make the creation of such a version file easier.
@@ -30,8 +33,18 @@ The key/value pairs that be specified in the version file and [their official me
 pyinstaller-versionfile provides both a command line interface and a functional API.
 
 ### Command line interface
-pyinstaller-versionfile provides a command line interface to convert a simple YAML file into a version-file suitable
-to pass to PyInstaller via the `--version-file=` option.
+pyinstaller-versionfile provides a command line interface that can be used to create a version file that can be passed to PyInstaller with the `--version-file=` option.
+
+Run
+```cmd
+pyinstaller_version --help
+```
+to see full interface description.
+
+The positional parameter `metadata_source` is used to pass either the path of a
+YAML file containing the metadata or the name of the distribution from which the
+metadata is automatically extracted. In case of extracting from distribution the
+option ``--source-format=`` need to be set to `distribution` or `dist`.
 
 A complete YAML configuration looks like this:
 ```YAML
@@ -56,10 +69,20 @@ create-version-file metadata.yml --outfile file_version_info.txt
 ```
 where metadata.yml is the YAML configuration file from above.
 
+To run metadata extraction from distribution call:
+```cmd
+create-version-file PackageName --source-format dist --outfile file_version_info.txt
+```
 
 #### Extracting Version Information
-As an alternative to specifying the version directly in the YAML file, there are two alternatives which may be more
-suitable, depending on the use case:
+In addition to otherwise constant project data, the version number is an
+exception that requires additional effort. Of course, it is most convenient if
+the version is managed within the distribution and can be taken
+from its metadata automatically.
+
+For those who use YAML files or those who do not maintain version data in the
+distribution metadata, pyinstaller-versionfile offers two alternatives, which
+may be more suitable, depending on the use case.
 
 ##### Link to an External File
 Instead of writing the version string directly into the YAML file, you can also specify the (relative) path to another
@@ -109,6 +132,16 @@ pyinstaller_versionfile.create_versionfile(
     original_filename="SimpleApp.exe",
     product_name="Simple App",
     translations=[0, 1200]
+)
+```
+
+Use this to generate version-file from distribution:
+``` Python
+import pyinstaller_versionfile
+
+pyinstaller_versionfile.create_versionfile_from_distribution(
+    output_file="versionfile.txt",
+    distname="myPackage"
 )
 ```
 
