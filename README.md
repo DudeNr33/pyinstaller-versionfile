@@ -76,13 +76,9 @@ create-version-file PackageName --source-format dist --outfile file_version_info
 
 #### Extracting Version Information
 In addition to otherwise constant project data, the version number is an
-exception that requires additional effort. Of course, it is most convenient if
-the version is managed within the distribution and can be taken
-from its metadata automatically.
-
-For those who use YAML files or those who do not maintain version data in the
-distribution metadata, pyinstaller-versionfile offers two alternatives, which
-may be more suitable, depending on the use case.
+exception that requires additional effort. As an alternative to specifying the
+version directly in the YAML file or the distribution metadata, there are two
+options which may be more suitable, depending on the use case.
 
 ##### Link to an External File
 Instead of writing the version string directly into the YAML file, you can also specify the (relative) path to another
@@ -104,6 +100,13 @@ It is also possible to set the version directly over the command line using the 
 create-version-file metadata.yml --outfile file_version_info.txt --version 0.8.1.5
 ```
 This can be useful if you want to use a CI build number as the version. 
+
+#### Extraction from distribution
+
+Developers who has their distribution installed during development, as editable
+for example, may find it advantageous to realise automated versioning, e.g. with
+setuptools_scm. If then version is provided in the metadata of the distribution,
+this is where obtaining from distribution comes into play.
 
 ### Functional API
 You can also use pyinstaller-versionfile from your own python code by directly calling the functional API.
