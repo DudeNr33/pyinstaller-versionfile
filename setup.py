@@ -34,7 +34,10 @@ setuptools.setup(
     version=version,
     author="Andreas Finkler",
     author_email="andi.finkler@gmail.com",
-    description="Create a version file from a simple YAML config file",
+    description="""
+        Create a windows version-file from metadata stored in a simple
+        self-written YAML file or obtained from an installed distribution.
+    """,
     long_description=long_description + "\n\n" + changelog,
     long_description_content_type="text/markdown",
     url="https://github.com/DudeNr33/pyinstaller-versionfile",
