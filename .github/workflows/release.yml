@@ -1,0 +1,26 @@
+name: Release
+on:
+  push:
+    tags:
+      - v*.*.*
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+      - name: Setup poetry
+        uses: abatilo/actions-poetry@v3.0.0
+        with:
+          poetry-version: 1.8.3
+      - name: Configure Poetry
+        run: poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
+      - name: Combine Readme and Changelog for PyPI
+        run: |
+          cp README.md README_ONLY.md
+          cat README_ONLY.md CHANGELOG.md > README.md
+      - name: Publish package
+        run: poetry publish --build

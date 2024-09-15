@@ -1,7 +1,0 @@
-# include all requirements necessary to run the application
--r requirements.txt
-
-setuptools
-pylint
-pytest
-tox
