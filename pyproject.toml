@@ -27,9 +27,9 @@ create-version-file = "pyinstaller_versionfile.__main__:main"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-Jinja2 = "^3.1.4"
-PyYAML = "^6.0.2"
-packaging = "^24.1"
+Jinja2 = "*"
+PyYAML = "*"
+packaging = "*"
 
 [tool.poetry.group.dev.dependencies]
 setuptools = "^74.1.2"
