@@ -1,5 +1,21 @@
 # Changelog
 
+## v3.0.0 (tba)
+
+### New
+
+* Drop compatibility with Python <3.9 [DudeNr33]
+
+* New option to extract information from distribution metadata instead of YAML file. [truderung]
+
+* New CLI parameter `--source-format` with possible values `yaml`, `distribution`, `dist` to select the source for metadata. [truderung]
+
+### Internal
+
+* Switch to Poetry for packaging.
+
+* Remove gitchangelog for changelog generation, as it would require a rewrite of the git history. Changelog is maintained manually.
+
 ## v2.1.1 (2022-11-21)
 
 ### Fix
@@ -24,4 +40,4 @@
 
 * Definition of metadata and creation of version file are now handled in separate classes, and it is not strictly necessary to use a file as input. [DudeNr33]
 
-* Use gitchangelog for automatic changelog generation. [dudenr33]
+* Use gitchangelog for automatic changelog generation. [DudeNr33]

@@ -26,3 +26,7 @@ To include the end-to-end tests on Windows, set the environment variable `includ
 ```bash
 tox -e tests-win
 ```
+
+## Changelog
+
+Currently, the changelog is maintained manually.
