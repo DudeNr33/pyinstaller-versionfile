@@ -8,10 +8,7 @@ import sys
 
 import pytest
 import yaml
-try:
-    from unittest import mock
-except ImportError:
-    import mock
+from unittest import mock
 
 from pyinstaller_versionfile.__main__ import main
 
