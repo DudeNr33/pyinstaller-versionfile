@@ -3,10 +3,7 @@ Author: Andreas Finkler
 
 Unit tests for pyinstaller_versionfile.writer.
 """
-try:
-    from unittest import mock
-except ImportError:
-    import mock  # Python 2.7
+from unittest import mock
 
 import pytest
 

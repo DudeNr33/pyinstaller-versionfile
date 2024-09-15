@@ -4,7 +4,6 @@ Author: Andreas Finkler
 import codecs
 import re
 import itertools
-# noinspection PyCompatibility
 from pathlib import Path
 
 from importlib.metadata import (
@@ -21,7 +20,7 @@ except ImportError:  # pragma: no cover
 from pyinstaller_versionfile import exceptions
 
 
-class MetaData(object):
+class MetaData:
     """
     Read and validate the metadata provided for versionfile generation.
     """

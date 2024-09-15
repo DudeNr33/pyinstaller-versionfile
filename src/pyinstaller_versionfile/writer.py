@@ -13,7 +13,7 @@ from pyinstaller_versionfile.exceptions import InternalUsageError, UsageError
 TEMPLATE_FILE = os.path.join(os.path.abspath(os.path.dirname(__file__)), "version_file_template.txt")
 
 
-class Writer(object):
+class Writer:
     """
     Creates the output file.
     """
