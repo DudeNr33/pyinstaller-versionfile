@@ -23,7 +23,8 @@ classifiers = [
 ]
 
 [tool.poetry.scripts]
-create-version-file = "pyinstaller_versionfile.__main__:main"
+create-version-file = "pyinstaller_versionfile.__main__:create_version_file"
+pyivf-make_version = "pyinstaller_versionfile.__main__:make_version"
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -36,6 +37,9 @@ setuptools = "^74.1.2"
 pylint = "^3.2.7"
 pytest = "^8.3.3"
 tox = "^4.18.1"
+black = "^24.8.0"
+pyinstaller = { version = "^6.10.0", python = "<3.14" }  # PyInstaller unfortunately does not use "<4.0" as upper bound - this Python restriction will need to be updated once in a while
+pywin32 = "^306"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

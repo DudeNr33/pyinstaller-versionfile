@@ -5,12 +5,12 @@ Integration tests for interaction with PyInstaller.
 import os
 import subprocess
 import sys
+from unittest import mock
 
 import pytest
 import yaml
-from unittest import mock
 
-from pyinstaller_versionfile.__main__ import main
+from pyinstaller_versionfile.__main__ import create_version_file 
 
 RESOURCE_DIR = os.path.join(os.path.dirname(__file__), "../resources")
 ACCEPTANCETEST_METADATA = os.path.join(RESOURCE_DIR, "acceptancetest_metadata.yml")
@@ -29,7 +29,7 @@ def test_end2end_exe_generation(tmpdir, temp_version_file):
     version info.
     Other attributes are not checked for.
     """
-    with open(ACCEPTANCETEST_METADATA) as infile:
+    with open(ACCEPTANCETEST_METADATA, encoding="utf-8") as infile:
         metadata = yaml.load(infile, Loader=yaml.CLoader)
     expected_version = metadata["Version"]
     args = mock.Mock()
@@ -37,7 +37,7 @@ def test_end2end_exe_generation(tmpdir, temp_version_file):
     args.source_format = 'yaml'
     args.outfile = temp_version_file
     args.version = False
-    main(args)
+    create_version_file(args)
     build_dir = os.path.join(tmpdir, "build")
     out_dir = os.path.join(tmpdir, "dist")
     returncode = subprocess.call(
@@ -60,13 +60,8 @@ def get_version_number(filename):
     from win32api import GetFileVersionInfo, LOWORD, HIWORD
     try:
         info = GetFileVersionInfo(filename, "\\")
-        file_version_ms = info['FileVersionMS']
-        file_version_ls = info['FileVersionLS']
-        return "{}.{}.{}.{}".format(
-            HIWORD(file_version_ms),
-            LOWORD(file_version_ms),
-            HIWORD(file_version_ls),
-            LOWORD(file_version_ls),
-        )
+        file_vers_ms = info['FileVersionMS']
+        file_vers_ls = info['FileVersionLS']
+        return f"{HIWORD(file_vers_ms)}.{LOWORD(file_vers_ms)}.{HIWORD(file_vers_ls)}.{LOWORD(file_vers_ls)}"
     except Exception:  # pylint: disable=broad-except
         return None

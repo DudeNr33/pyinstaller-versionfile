@@ -1,17 +1,16 @@
 """
 Author: Andreas Finkler
 """
+
 import codecs
 import re
 import itertools
 from pathlib import Path
 
-from importlib.metadata import (
-    PackageNotFoundError,
-    distribution
-)
+from importlib.metadata import PackageNotFoundError, distribution
 
 import yaml
+
 try:
     from yaml import CLoader as Loader
 except ImportError:  # pragma: no cover
@@ -24,6 +23,7 @@ class MetaData:
     """
     Read and validate the metadata provided for versionfile generation.
     """
+
     placeholder_value = ""  # value to use if nothing was specified
     default_translations = [1033, 1200]
 
@@ -37,7 +37,7 @@ class MetaData:
         legal_copyright=None,
         original_filename=None,
         product_name=None,
-        translations=None
+        translations=None,
     ):
         self.version = version or "0.0.0.0"
         self.company_name = company_name or self.placeholder_value
@@ -49,21 +49,7 @@ class MetaData:
         self.translations = translations or self.default_translations
 
     @classmethod
-    def _generate(cls, data: dict) -> 'MetaData':
-        translations = cls._get_translations(data)
-        return cls(
-            version=data.get("Version"),
-            company_name=data.get("CompanyName"),
-            file_description=data.get("FileDescription"),
-            internal_name=data.get("InternalName"),
-            legal_copyright=data.get("LegalCopyright"),
-            original_filename=data.get("OriginalFilename"),
-            product_name=data.get("ProductName"),
-            translations=translations,
-        )
-
-    @classmethod
-    def from_distribution(cls, distname: str) -> 'MetaData':
+    def from_distribution(cls, distname: str, **kwargs) -> "MetaData":
         """
         Factory method to extract metadata from installed packages.
         """
@@ -78,24 +64,25 @@ class MetaData:
             meta.get("Author-email", None),
             meta.get("Maintainer", None),
             meta.get("Maintainer-email", None),
-            meta.get("Home-page", None)
+            meta.get("Home-page", None),
         ]
         company = ", ".join([c for c in company if c])
 
-        data = dict({
-            "Version": meta.get("Version", None),
-            "CompanyName": company,
-            "FileDescription": meta.get("Summary", None),
-            "InternalName": meta.get("Name", None),
-            "LegalCopyright": meta.get("License", None),
-            "OriginalFilename": meta.get("Name", None),
-            "ProductName": meta.get("Name", None),
-            "Translation": meta.get("Translation", None)
-        })
-        return cls._generate(data)
+        kwargs.setdefault("version", meta.get("Verison", None))
+        kwargs.setdefault("company_name", company)
+        kwargs.setdefault("file_description", meta.get("Summary", None))
+        kwargs.setdefault("internal_name", meta.get("Name", None))
+        kwargs.setdefault("legal_copyright", meta.get("License", None))
+        kwargs.setdefault("original_filename", meta.get("Name", None))
+        kwargs.setdefault("product_name", meta.get("Name", None))
+        kwargs.setdefault(
+            "translations", cls._get_translations(meta)
+        )  # TODO: check format of this data
+
+        return cls(**kwargs)
 
     @classmethod
-    def from_file(cls, filepath: str) -> 'MetaData':
+    def from_file(cls, filepath: str, **kwargs) -> "MetaData":
         """
         Factory method to create a MetaData instance from a file.
         """
@@ -103,21 +90,37 @@ class MetaData:
             with codecs.open(filepath, encoding="utf-8") as infile:
                 data = yaml.load(infile, Loader=Loader)
         except IsADirectoryError as err:
-            raise exceptions.InputError(f"Specified filepath {filepath} is a directory, not a file") from err
+            raise exceptions.InputError(
+                f"Specified filepath {filepath} is a directory, not a file"
+            ) from err
         except FileNotFoundError as err:
             raise exceptions.InputError(f"File {filepath} does not exist") from err
         except IOError as err:
             raise exceptions.InputError("Failed to read input from file") from err
         except yaml.scanner.ScannerError as err:
-            raise exceptions.InputError("Failed to read YAML data due to scanner error") from err
+            raise exceptions.InputError(
+                "Failed to read YAML data due to scanner error"
+            ) from err
         if not isinstance(data, dict):
-            raise exceptions.InputError(f"Input file must contain a mapping, but is: {type(data)}")
+            raise exceptions.InputError(
+                f"Input file must contain a mapping, but is: {type(data)}"
+            )
+
         version = data.get("Version", "0.0.0.0")
-        path = Path(filepath).parent/version
+        path = Path(filepath).parent / version
         if path.is_file():
             version = path.read_text().strip()
-        data.update({"Version": version})
-        return cls._generate(data)
+
+        kwargs.setdefault("version", version)
+        kwargs.setdefault("company_name", data.get("CompanyName"))
+        kwargs.setdefault("file_description", data.get("FileDescription"))
+        kwargs.setdefault("internal_name", data.get("InternalName"))
+        kwargs.setdefault("legal_copyright", data.get("LegalCopyright"))
+        kwargs.setdefault("original_filename", data.get("OriginalFilename"))
+        kwargs.setdefault("product_name", data.get("ProductName"))
+        kwargs.setdefault("translations", cls._get_translations(data))
+
+        return cls(**kwargs)
 
     @classmethod
     def _get_translations(cls, data):
@@ -128,7 +131,9 @@ class MetaData:
         # pair of language and charset, the third and fourth form the second pair, and so on.
         # For better readability the metadata file uses a list of dictionaries here, so we have
         # to flatten it first
-        return list(itertools.chain(*[(d["langID"], d["charsetID"]) for d in input_data]))
+        return list(
+            itertools.chain(*[(d["langID"], d["charsetID"]) for d in input_data])
+        )
 
     def set_version(self, version_string):
         """
@@ -148,7 +153,7 @@ class MetaData:
         version_regex = r"\d+(\.\d+){0,3}"
         if not re.fullmatch(pattern=version_regex, string=version):
             raise exceptions.ValidationError(
-                f"Provided version {version} is not valid. " \
+                f"Provided version {version} is not valid. "
                 "Valid versions must contain four places with only digits."
             )
 

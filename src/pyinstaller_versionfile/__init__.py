@@ -3,6 +3,7 @@ Author: Andreas Finkler
 
 Functional API for programmatic use.
 """
+
 from pyinstaller_versionfile.metadata import MetaData
 from pyinstaller_versionfile.writer import Writer
 
@@ -36,19 +37,29 @@ def create_versionfile(
     __create(metadata, output_file)
 
 
-def create_versionfile_from_input_file(output_file, input_file, version=None):
+def create_versionfile_from_input_file(
+    output_file,
+    input_file,
+    version=None,
+    **kwargs,
+):
     """
     Create a new versionfile from metadata specified in input_file.
     If the version argument is set, the version specified in input_file will be overwritten with the value
     of version.
     """
-    metadata = MetaData.from_file(input_file)
+    metadata = MetaData.from_file(input_file, **kwargs)
     if version:
         metadata.set_version(version)
     __create(metadata, output_file)
 
 
-def create_versionfile_from_distribution(output_file, distname, version=None):
+def create_versionfile_from_distribution(
+    output_file,
+    distname,
+    version=None,
+    **kwargs,
+):
     """
     Create a new versionfile from metadata that are stored in distribution
     addressed by `distname`. If the `version` argument is set, the version specified
@@ -57,7 +68,7 @@ def create_versionfile_from_distribution(output_file, distname, version=None):
     This function can be helpful with regard to the automatic versioning of
     packages.
     """
-    metadata = MetaData.from_distribution(distname)
+    metadata = MetaData.from_distribution(distname, **kwargs)
     if version:
         metadata.set_version(version)
     __create(metadata, output_file)
