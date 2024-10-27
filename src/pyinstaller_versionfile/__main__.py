@@ -20,14 +20,6 @@ def make_version(args=None):
         original_filename=args.original_filename,
         product_name=args.product_name,
     )
-    # TODO: ugly workaround - better to not add None values to optional_args at all
-    keys_to_remove = []
-    for key, value in optional_args.items():
-        if value is None:
-            keys_to_remove.append(key)
-    for key in keys_to_remove:
-        optional_args.pop(key)
-
 
     if args.source_format == "yaml":
         pyinstaller_versionfile.create_versionfile_from_input_file(

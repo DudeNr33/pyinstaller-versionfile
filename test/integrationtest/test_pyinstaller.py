@@ -36,7 +36,7 @@ def test_end2end_exe_generation(tmpdir, temp_version_file):
     args.metadata_source = ACCEPTANCETEST_METADATA
     args.source_format = 'yaml'
     args.outfile = temp_version_file
-    args.version = False
+    args.version = None
     create_version_file(args)
     build_dir = os.path.join(tmpdir, "build")
     out_dir = os.path.join(tmpdir, "dist")

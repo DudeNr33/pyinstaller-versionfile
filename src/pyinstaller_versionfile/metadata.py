@@ -26,6 +26,16 @@ class MetaData:
 
     placeholder_value = ""  # value to use if nothing was specified
     default_translations = [1033, 1200]
+    key_conversion = {
+        "Version": "version",
+        "CompanyName": "company_name",
+        "FileDescription": "file_description",
+        "InternalName": "internal_name",
+        "LegalCopyright": "legal_copyright",
+        "OriginalFilename": "original_filename",
+        "ProductName": "product_name",
+        "Translation": "translations",
+    }
 
     # pylint: disable=too-many-arguments
     def __init__(
@@ -106,25 +116,21 @@ class MetaData:
                 f"Input file must contain a mapping, but is: {type(data)}"
             )
 
-        version = data.get("Version", "0.0.0.0")
+        data = {cls.key_conversion[k]: v for k, v in data.items() if k in cls.key_conversion}
+        data.update({k: v for k, v in kwargs.items() if v is not None})
+
+        version = data.get("version", "0.0.0.0")
         path = Path(filepath).parent / version
         if path.is_file():
             version = path.read_text().strip()
+            data["version"] = version
+        data["translations"] = cls._get_translations(data)
 
-        kwargs.setdefault("version", version)
-        kwargs.setdefault("company_name", data.get("CompanyName"))
-        kwargs.setdefault("file_description", data.get("FileDescription"))
-        kwargs.setdefault("internal_name", data.get("InternalName"))
-        kwargs.setdefault("legal_copyright", data.get("LegalCopyright"))
-        kwargs.setdefault("original_filename", data.get("OriginalFilename"))
-        kwargs.setdefault("product_name", data.get("ProductName"))
-        kwargs.setdefault("translations", cls._get_translations(data))
-
-        return cls(**kwargs)
+        return cls(**data)
 
     @classmethod
     def _get_translations(cls, data):
-        input_data = data.get("Translation")
+        input_data = data.get("translations")
         if not input_data:
             return cls.default_translations
         # The version file requires a flat list, where the first two values form the first
