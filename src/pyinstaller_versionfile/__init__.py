@@ -18,7 +18,7 @@ def create_versionfile(
     original_filename=None,
     product_name=None,
     translations=None,
-):  # pylint: disable=too-many-arguments
+):  # pylint: disable=too-many-arguments, too-many-positional-arguments
     """
     Create a new versionfile from the information given.
     All parameters except output_file are optional and will be replaced with placeholder values
@@ -48,7 +48,7 @@ def create_versionfile_from_input_file(
     original_filename=None,
     product_name=None,
     translations=None,
-):
+):  # pylint: disable=too-many-arguments, too-many-positional-arguments
     """
     Create a new versionfile from metadata specified in input_file.
     If the version argument is set, the version specified in input_file will be overwritten with the value
@@ -81,7 +81,7 @@ def create_versionfile_from_distribution(
     original_filename=None,
     product_name=None,
     translations=None,
-):
+):  # pylint: disable=too-many-arguments, too-many-positional-arguments
     """
     Create a new versionfile from metadata that are stored in distribution
     addressed by `distname`. If the `version` argument is set, the version specified

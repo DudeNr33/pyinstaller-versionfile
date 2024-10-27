@@ -37,7 +37,7 @@ class MetaData:
         "Translation": "translations",
     }
 
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-arguments, too-many-positional-arguments
     def __init__(
         self,
         version=None,
@@ -87,7 +87,7 @@ class MetaData:
         kwargs.setdefault("product_name", meta.get("Name", None))
         kwargs.setdefault(
             "translations", cls._get_translations(meta)
-        )  # TODO: check format of this data
+        )  # TODO: check format of this data    pylint: disable=fixme
 
         return cls(**kwargs)
 

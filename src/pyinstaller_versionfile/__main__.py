@@ -11,15 +11,15 @@ import pyinstaller_versionfile
 def make_version(args=None):
     args = args or parse_args_make_version(args)
 
-    optional_args = dict(
-        version=args.version,
-        company_name=args.company_name,
-        file_description=args.file_description,
-        internal_name=args.internal_name,
-        legal_copyright=args.legal_copyright,
-        original_filename=args.original_filename,
-        product_name=args.product_name,
-    )
+    optional_args = {
+        "version": args.version,
+        "company_name": args.company_name,
+        "file_description": args.file_description,
+        "internal_name": args.internal_name,
+        "legal_copyright": args.legal_copyright,
+        "original_filename": args.original_filename,
+        "product_name": args.product_name,
+    }
 
     if args.source_format == "yaml":
         pyinstaller_versionfile.create_versionfile_from_input_file(
@@ -98,7 +98,7 @@ def parse_args_make_version(args):
         help="Name of the product with which the file is distributed.",
     )
 
-    # TODO: idea for translation? Maybe langID=0;charsetID=1200? or just <langID>:<charsetID>?
+    # TODO: idea for translation? Maybe langID=0;charsetID=1200? or just <langID>:<charsetID>?  pylint: disable=fixme
     args = parser.parse_args(args)
     if args.source_format and not args.metadata_source:
         parser.error("--metadata-source is required if --source-format is specified.")
