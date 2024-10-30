@@ -114,7 +114,7 @@ def test_end2end_pyivf_make_version_all_from_command_line(tmp_path: Path, temp_v
 
 def test_end2end_pyivf_make_version_overwrite_all_from_yaml(temp_version_file: Path) -> None:
     returncode = subprocess.call(
-        [
+        " ".join([
             "pyivf-make_version",
             "--source-format",
             "yaml",
@@ -136,7 +136,7 @@ def test_end2end_pyivf_make_version_overwrite_all_from_yaml(temp_version_file: P
             '"Test Original Filename"',
             "--product-name",
             '"Test Product Name"',
-        ],
+        ]),
         shell=True,
     )
     assert returncode == 0
