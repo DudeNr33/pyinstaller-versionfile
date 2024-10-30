@@ -4,8 +4,8 @@ Main file for pyinstaller-versionfile, which is the entrypoint for the command l
 
 import argparse
 
-from pyinstaller_versionfile import exceptions
 import pyinstaller_versionfile
+from pyinstaller_versionfile import exceptions
 
 
 def make_version(args=None):

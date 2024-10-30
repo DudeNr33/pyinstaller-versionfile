@@ -3,8 +3,8 @@ Integration tests for the command line utility provided by pyinstaller-versionfi
 """
 
 import os
-from pathlib import Path
 import subprocess
+from pathlib import Path
 
 from pytest import MonkeyPatch
 
@@ -14,14 +14,14 @@ ACCEPTANCETEST_METADATA = os.path.join(RESOURCE_DIR, "acceptancetest_metadata.ym
 
 def test_end2end_version_file_creation(temp_version_file: Path):
     returncode = subprocess.call(
-        [
+        " ".join([
             "create-version-file",
             ACCEPTANCETEST_METADATA,
             "--outfile",
-            temp_version_file,
+            str(temp_version_file.resolve()),
             "--version",
             "0.8.1.5",
-        ],
+        ]),
         shell=True,
     )
     assert returncode == 0
@@ -30,7 +30,7 @@ def test_end2end_version_file_creation(temp_version_file: Path):
 
 def test_end2end_pyivf_make_version_from_yaml(temp_version_file):
     returncode = subprocess.call(
-        [
+        " ".join([
             "pyivf-make_version",
             "--source-format",
             "yaml",
@@ -40,7 +40,7 @@ def test_end2end_pyivf_make_version_from_yaml(temp_version_file):
             str(temp_version_file),
             "--version",
             "0.8.1.5",
-        ],
+        ]),
         shell=True,
     )
     assert returncode == 0
@@ -77,25 +77,25 @@ def test_end2end_pyivf_make_version_all_default(monkeypatch: MonkeyPatch, tmp_pa
 
 def test_end2end_pyivf_make_version_all_from_command_line(tmp_path: Path, temp_version_file: Path):
     returncode = subprocess.call(
-        [
+        " ".join([
             "pyivf-make_version",
             "--outfile",
             str(temp_version_file),
             "--version",
             "1.2.3.4",
             "--company-name",
-            "Test Company Name",
+            '"Test Company Name"',
             "--file-description",
-            "Test File Description",
+            '"Test File Description"',
             "--internal-name",
-            "Test Internal Name",
+            '"Test Internal Name"',
             "--legal-copyright",
-            "Test Legal Copyright",
+            '"Test Legal Copyright"',
             "--original-filename",
-            "Test Original Filename",
+            '"Test Original Filename"',
             "--product-name",
-            "Test Product Name",
-        ],
+            '"Test Product Name"',
+        ]),
         shell=True,
     )
     assert returncode == 0
@@ -121,21 +121,21 @@ def test_end2end_pyivf_make_version_overwrite_all_from_yaml(temp_version_file: P
             "--metadata-source",
             ACCEPTANCETEST_METADATA,
             "--outfile",
-            str(temp_version_file),
+            str(temp_version_file.resolve()),
             "--version",
             "1.2.3.4",
             "--company-name",
-            "Test Company Name",
+            '"Test Company Name"',
             "--file-description",
-            "Test File Description",
+            '"Test File Description"',
             "--internal-name",
-            "Test Internal Name",
+            '"Test Internal Name"',
             "--legal-copyright",
-            "Test Legal Copyright",
+            '"Test Legal Copyright"',
             "--original-filename",
-            "Test Original Filename",
+            '"Test Original Filename"',
             "--product-name",
-            "Test Product Name",
+            '"Test Product Name"',
         ],
         shell=True,
     )
