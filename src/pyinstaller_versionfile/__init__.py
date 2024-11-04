@@ -3,6 +3,7 @@ Author: Andreas Finkler
 
 Functional API for programmatic use.
 """
+
 from pyinstaller_versionfile.metadata import MetaData
 from pyinstaller_versionfile.writer import Writer
 
@@ -17,7 +18,7 @@ def create_versionfile(
     original_filename=None,
     product_name=None,
     translations=None,
-):  # pylint: disable=too-many-arguments
+):  # pylint: disable=too-many-arguments, too-many-positional-arguments
     """
     Create a new versionfile from the information given.
     All parameters except output_file are optional and will be replaced with placeholder values
@@ -36,19 +37,51 @@ def create_versionfile(
     __create(metadata, output_file)
 
 
-def create_versionfile_from_input_file(output_file, input_file, version=None):
+def create_versionfile_from_input_file(
+    output_file,
+    input_file,
+    version=None,
+    company_name=None,
+    file_description=None,
+    internal_name=None,
+    legal_copyright=None,
+    original_filename=None,
+    product_name=None,
+    translations=None,
+):  # pylint: disable=too-many-arguments, too-many-positional-arguments
     """
     Create a new versionfile from metadata specified in input_file.
     If the version argument is set, the version specified in input_file will be overwritten with the value
     of version.
     """
-    metadata = MetaData.from_file(input_file)
+    metadata = MetaData.from_file(
+        input_file,
+        version=version,
+        company_name=company_name,
+        file_description=file_description,
+        internal_name=internal_name,
+        legal_copyright=legal_copyright,
+        original_filename=original_filename,
+        product_name=product_name,
+        translations=translations,
+    )
     if version:
         metadata.set_version(version)
     __create(metadata, output_file)
 
 
-def create_versionfile_from_distribution(output_file, distname, version=None):
+def create_versionfile_from_distribution(
+    output_file,
+    distname,
+    version=None,
+    company_name=None,
+    file_description=None,
+    internal_name=None,
+    legal_copyright=None,
+    original_filename=None,
+    product_name=None,
+    translations=None,
+):  # pylint: disable=too-many-arguments, too-many-positional-arguments
     """
     Create a new versionfile from metadata that are stored in distribution
     addressed by `distname`. If the `version` argument is set, the version specified
@@ -57,7 +90,17 @@ def create_versionfile_from_distribution(output_file, distname, version=None):
     This function can be helpful with regard to the automatic versioning of
     packages.
     """
-    metadata = MetaData.from_distribution(distname)
+    metadata = MetaData.from_distribution(
+        distname,
+        version=version,
+        company_name=company_name,
+        file_description=file_description,
+        internal_name=internal_name,
+        legal_copyright=legal_copyright,
+        original_filename=original_filename,
+        product_name=product_name,
+        translations=translations,
+    )
     if version:
         metadata.set_version(version)
     __create(metadata, output_file)

@@ -37,14 +37,20 @@ pyinstaller-versionfile provides a command line interface that can be used to cr
 
 Run
 ```cmd
-pyinstaller_version --help
+pyivf-make_version --help
 ```
 to see full interface description.
 
-The positional parameter `metadata_source` is used to pass either the path of a
-YAML file containing the metadata or the name of the distribution from which the
-metadata is automatically extracted. In case of extracting from distribution the
-option ``--source-format=`` need to be set to `distribution` or `dist`.
+> The CLI command `create-version-file` from pyinstaller-versionfile < V3 is currently still available for backwards compatibility, but it is no longer actively maintained 
+
+You can specify all parameters (except translations) via CLI options. If not specified, they will be left empty.  
+Static information like company name or file description can also be provided from other sources, which can be selected via `--source-format`:
+
+* `yaml`: take the information from a YAML file
+* `dist` or `distribution`: take the information from a installed Python package by reading its distribution metadata
+
+If `--source-format` is specified, `--metadata-source` must be given in addition and specify either the path to the YAML file, or the name of the Python package.
+All options passed additionally can be used to overwrite the information extracted from `--metadata-source`.
 
 A complete YAML configuration looks like this:
 ```YAML
@@ -65,13 +71,13 @@ The encoding must be UTF-8. All fields are optional, you can choose to specify o
 
 To create version-file from this, simple run:
 ```cmd
-create-version-file metadata.yml --outfile file_version_info.txt
+pyivf-make_version --source-format yaml --metadata-source metadata.yml --outfile file_version_info.txt
 ```
 where metadata.yml is the YAML configuration file from above.
 
 To run metadata extraction from distribution call:
 ```cmd
-create-version-file PackageName --source-format dist --outfile file_version_info.txt
+pyivf-make_version --source-format dist --metadata-source PackageName --outfile file_version_info.txt
 ```
 
 #### Extracting Version Information
@@ -97,7 +103,7 @@ ProductName: Simple App
 ##### Setting the Version from the Command Line
 It is also possible to set the version directly over the command line using the `--version` option:
 ```cmd
-create-version-file metadata.yml --outfile file_version_info.txt --version 0.8.1.5
+pyivf-make_version --source-format yaml --metadata-source metadata.yml --outfile file_version_info.txt --version 0.8.1.5
 ```
 This can be useful if you want to use a CI build number as the version. 
 

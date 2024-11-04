@@ -10,6 +10,9 @@
 
 * New CLI parameter `--source-format` with possible values `yaml`, `distribution`, `dist` to select the source for metadata. [truderung]
 
+* New CLI command `--pyivf-make_version` with greater flexibility - you can specify all options via command line options (without needing a YAML file),
+or overwrite any of the parameters provided in the input file or distribution metadata. [DudeNr33]
+
 ### Internal
 
 * Switch to Poetry for packaging.
