@@ -78,7 +78,7 @@ class MetaData:
         ]
         company = ", ".join([c for c in company if c])
 
-        kwargs.setdefault("version", meta.get("Verison", None))
+        kwargs.setdefault("version", meta.get("Version", None))
         kwargs.setdefault("company_name", company)
         kwargs.setdefault("file_description", meta.get("Summary", None))
         kwargs.setdefault("internal_name", meta.get("Name", None))
@@ -116,7 +116,9 @@ class MetaData:
                 f"Input file must contain a mapping, but is: {type(data)}"
             )
 
-        data = {cls.key_conversion[k]: v for k, v in data.items() if k in cls.key_conversion}
+        data = {
+            cls.key_conversion[k]: v for k, v in data.items() if k in cls.key_conversion
+        }
         data.update({k: v for k, v in kwargs.items() if v is not None})
 
         version = data.get("version", "0.0.0.0")
