@@ -9,6 +9,7 @@ from jinja2 import Template
 from jinja2.exceptions import UndefinedError
 
 from pyinstaller_versionfile.exceptions import InternalUsageError, UsageError
+from pyinstaller_versionfile.metadata import MetaData
 
 TEMPLATE_FILE = os.path.join(os.path.abspath(os.path.dirname(__file__)), "version_file_template.txt")
 
@@ -27,11 +28,11 @@ class Writer:
         "ProductName",
     )
 
-    def __init__(self, metadata):
+    def __init__(self, metadata: MetaData):
         self.metadata = metadata
-        self._content = None
+        self._content = ""
 
-    def render(self):
+    def render(self) -> None:
         """
         Render the content of the output file.
         """
@@ -40,7 +41,7 @@ class Writer:
             raise InternalUsageError("Not all necessary parameters provided by MetaData.to_dict()")
 
         with codecs.open(TEMPLATE_FILE, encoding="utf-8") as infile:
-            template = Template(infile.read())
+            template: Template = Template(infile.read())
         try:
             self._content = template.render(**data)
         except UndefinedError as err:
@@ -48,7 +49,7 @@ class Writer:
                 "Could not render template because parameters are missing (jinja2 UndefinedError)."
             ) from err
 
-    def save(self, filepath):
+    def save(self, filepath: str) -> None:
         """
         Save the rendered outfile to disk.
         """

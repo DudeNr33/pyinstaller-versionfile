@@ -32,5 +32,5 @@ class InternalUsageError(Exception):
     
     """
 
-    def __init__(self, message):
+    def __init__(self, message: str) -> None:
         super(InternalUsageError, self).__init__(self.MESSAGE_PREFIX + message)  # pylint: disable=super-with-arguments
