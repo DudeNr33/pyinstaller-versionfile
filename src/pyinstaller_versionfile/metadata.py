@@ -1,6 +1,9 @@
 """
 Author: Andreas Finkler
 """
+# pylint: disable=too-many-arguments, too-many-positional-arguments
+from __future__ import annotations
+from typing import Optional, Union, TypedDict, Any
 
 import codecs
 import re
@@ -14,9 +17,21 @@ import yaml
 try:
     from yaml import CLoader as Loader
 except ImportError:  # pragma: no cover
-    from yaml import Loader
+    from yaml import Loader  # type: ignore
 
 from pyinstaller_versionfile import exceptions
+
+
+class MetadataKwargs(TypedDict, total=False):
+    """Helper class to specify type hints for the kwargs used in some of the methods."""
+    version: Optional[str]
+    company_name: Optional[str]
+    file_description: Optional[str]
+    internal_name: Optional[str]
+    legal_copyright: Optional[str]
+    original_filename: Optional[str]
+    product_name: Optional[str]
+    translations: Optional[list[int]]
 
 
 class MetaData:
@@ -37,18 +52,17 @@ class MetaData:
         "Translation": "translations",
     }
 
-    # pylint: disable=too-many-arguments, too-many-positional-arguments
     def __init__(
         self,
-        version=None,
-        company_name=None,
-        file_description=None,
-        internal_name=None,
-        legal_copyright=None,
-        original_filename=None,
-        product_name=None,
-        translations=None,
-    ):
+        version: Optional[str]=None,
+        company_name: Optional[str]=None,
+        file_description: Optional[str]=None,
+        internal_name: Optional[str]=None,
+        legal_copyright: Optional[str]=None,
+        original_filename: Optional[str]=None,
+        product_name: Optional[str]=None,
+        translations: Optional[list[int]]=None,
+    ) -> None:
         self.version = version or "0.0.0.0"
         self.company_name = company_name or self.placeholder_value
         self.file_description = file_description or self.placeholder_value
@@ -59,7 +73,8 @@ class MetaData:
         self.translations = translations or self.default_translations
 
     @classmethod
-    def from_distribution(cls, distname: str, **kwargs) -> "MetaData":
+    # better type hint for typing.Unpack[MetadataKwargs] requires at least Python 3.11
+    def from_distribution(cls, distname: str, **kwargs: Any) -> MetaData:
         """
         Factory method to extract metadata from installed packages.
         """
@@ -69,14 +84,14 @@ class MetaData:
         except PackageNotFoundError as err:  # pragma: no cover
             raise exceptions.InputError(f"Distribution {distname} not found") from err
 
-        company = [
+        meta_fields = [
             meta.get("Author", None),
             meta.get("Author-email", None),
             meta.get("Maintainer", None),
             meta.get("Maintainer-email", None),
             meta.get("Home-page", None),
         ]
-        company = ", ".join([c for c in company if c])
+        company = ", ".join([field for field in meta_fields if field])
 
         kwargs.setdefault("version", meta.get("Version", None))
         kwargs.setdefault("company_name", company)
@@ -86,13 +101,13 @@ class MetaData:
         kwargs.setdefault("original_filename", meta.get("Name", None))
         kwargs.setdefault("product_name", meta.get("Name", None))
         kwargs.setdefault(
-            "translations", cls._get_translations(meta)
-        )  # TODO: check format of this data    pylint: disable=fixme
+            "translations", cls.default_translations
+        )
 
         return cls(**kwargs)
 
     @classmethod
-    def from_file(cls, filepath: str, **kwargs) -> "MetaData":
+    def from_file(cls, filepath: str, **kwargs: Any) -> MetaData:
         """
         Factory method to create a MetaData instance from a file.
         """
@@ -126,38 +141,37 @@ class MetaData:
         if path.is_file():
             version = path.read_text().strip()
             data["version"] = version
-        data["translations"] = cls._get_translations(data)
+        data["translations"] = cls._get_translations(data.get("translations"))
 
         return cls(**data)
 
     @classmethod
-    def _get_translations(cls, data):
-        input_data = data.get("translations")
-        if not input_data:
+    def _get_translations(cls, data: Optional[list[dict[str, int]]]) -> list[int]:
+        if not data:
             return cls.default_translations
         # The version file requires a flat list, where the first two values form the first
         # pair of language and charset, the third and fourth form the second pair, and so on.
         # For better readability the metadata file uses a list of dictionaries here, so we have
         # to flatten it first
         return list(
-            itertools.chain(*[(d["langID"], d["charsetID"]) for d in input_data])
+            itertools.chain(*[(d["langID"], d["charsetID"]) for d in data])
         )
 
-    def set_version(self, version_string):
+    def set_version(self, version_string: str) -> None:
         """
         Explicitly set the version. Overwrites the existing version if already set.
         """
         self.__validate_version(version_string)
         self.version = version_string
 
-    def validate(self):
+    def validate(self) -> None:
         """
         Check if the supplied parameters are correct and understandable by PyInstaller.
         """
         self.__validate_version(self.version)
 
     @staticmethod
-    def __validate_version(version):
+    def __validate_version(version: str) -> None:
         version_regex = r"\d+(\.\d+){0,3}"
         if not re.fullmatch(pattern=version_regex, string=version):
             raise exceptions.ValidationError(
@@ -165,7 +179,7 @@ class MetaData:
                 "Valid versions must contain four places with only digits."
             )
 
-    def sanitize(self):
+    def sanitize(self) -> None:
         """
         Convert valid but insufficient input (e.g. too short version number) and perform some aesthetic work like
         stripping trailing whitespace.
@@ -179,7 +193,7 @@ class MetaData:
             if isinstance(value, str):
                 setattr(self, key, value.strip())
 
-    def to_dict(self):
+    def to_dict(self) -> dict[str, Union[str, list[int]]]:
         """
         Return all values necessary for rendering the template as dictionary.
         """

@@ -2,14 +2,18 @@
 Main file for pyinstaller-versionfile, which is the entrypoint for the command line script.
 """
 
+from typing import Sequence, Optional, Union
+
 import argparse
+from argparse import Namespace
 
 import pyinstaller_versionfile
 from pyinstaller_versionfile import exceptions
 
 
-def make_version(args=None):
-    args = args or parse_args_make_version(args)
+def make_version(args: Union[Namespace, Optional[Sequence[str]]] = None) -> None:
+    if not isinstance(args, Namespace):
+        args = parse_args_make_version(args)
 
     optional_args = {
         "version": args.version,
@@ -40,7 +44,7 @@ def make_version(args=None):
         )
 
 
-def parse_args_make_version(args):
+def parse_args_make_version(args: Optional[Sequence[str]]) -> Namespace:
     parser = argparse.ArgumentParser(
         description="Create a version file for PyInstaller."
     )
@@ -71,26 +75,34 @@ def parse_args_make_version(args):
     parser.add_argument(
         "--file-description",
         default=None,
-        help=("Description to be presented to users. "
-              "It may be displayed when the user is choosing files to install."),
+        help=(
+            "Description to be presented to users. "
+            "It may be displayed when the user is choosing files to install."
+        ),
     )
     parser.add_argument(
         "--internal-name",
         default=None,
-        help=("Internal name of the file. "
-              "If the file has no internal name, this string should be the original filename, without extension."),
+        help=(
+            "Internal name of the file. "
+            "If the file has no internal name, this string should be the original filename, without extension."
+        ),
     )
     parser.add_argument(
         "--legal-copyright",
         default=None,
-        help=("Copyright notices that apply to the file. "
-              "This should include the full text of all notices, legal symbols, copyright dates, and so on."),
+        help=(
+            "Copyright notices that apply to the file. "
+            "This should include the full text of all notices, legal symbols, copyright dates, and so on."
+        ),
     )
     parser.add_argument(
         "--original-filename",
         default=None,
-        help=("Original name of the file, not including a path. "
-              "This information enables an application to determine whether a file has been renamed by a user."),
+        help=(
+            "Original name of the file, not including a path. "
+            "This information enables an application to determine whether a file has been renamed by a user."
+        ),
     )
     parser.add_argument(
         "--product-name",
@@ -99,14 +111,15 @@ def parse_args_make_version(args):
     )
 
     # TODO: idea for translation? Maybe langID=0;charsetID=1200? or just <langID>:<charsetID>?  pylint: disable=fixme
-    args = parser.parse_args(args)
-    if args.source_format and not args.metadata_source:
+    parsed_args = parser.parse_args(args)
+    if parsed_args.source_format and not parsed_args.metadata_source:
         parser.error("--metadata-source is required if --source-format is specified.")
-    return args
+    return parsed_args
 
 
-def create_version_file(args=None):
-    args = args or parse_args_create_version_file(args)
+def create_version_file(args: Union[Namespace, Optional[Sequence[str]]] = None) -> None:
+    if not isinstance(args, Namespace):
+        args = parse_args_create_version_file(args)
     if args.source_format == "yaml":
         # from_yaml
         pyinstaller_versionfile.create_versionfile_from_input_file(
@@ -128,7 +141,7 @@ def create_version_file(args=None):
         )
 
 
-def parse_args_create_version_file(args):
+def parse_args_create_version_file(args: Optional[Sequence[str]]) -> Namespace:
     parser = argparse.ArgumentParser(
         description="Create a version file for PyInstaller from a YAML metadata file."
     )
