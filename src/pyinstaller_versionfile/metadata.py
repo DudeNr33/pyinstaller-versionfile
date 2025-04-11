@@ -3,7 +3,7 @@ Author: Andreas Finkler
 """
 # pylint: disable=too-many-arguments, too-many-positional-arguments
 from __future__ import annotations
-from typing import Optional, Union, TypedDict, Unpack
+from typing import Optional, Union, TypedDict, Any
 
 import codecs
 import re
@@ -73,7 +73,8 @@ class MetaData:
         self.translations = translations or self.default_translations
 
     @classmethod
-    def from_distribution(cls, distname: str, **kwargs: Unpack[MetadataKwargs]) -> MetaData:
+    # better type hint for typing.Unpack[MetadataKwargs] requires at least Python 3.11
+    def from_distribution(cls, distname: str, **kwargs: Any) -> MetaData:
         """
         Factory method to extract metadata from installed packages.
         """
@@ -106,7 +107,7 @@ class MetaData:
         return cls(**kwargs)
 
     @classmethod
-    def from_file(cls, filepath: str, **kwargs: Unpack[MetadataKwargs]) -> MetaData:
+    def from_file(cls, filepath: str, **kwargs: Any) -> MetaData:
         """
         Factory method to create a MetaData instance from a file.
         """
