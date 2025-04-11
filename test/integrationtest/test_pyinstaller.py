@@ -5,6 +5,7 @@ Integration tests for interaction with PyInstaller.
 import os
 import subprocess
 import sys
+from argparse import Namespace
 from unittest import mock
 
 import pytest
@@ -32,7 +33,7 @@ def test_end2end_exe_generation(tmpdir, temp_version_file):
     with open(ACCEPTANCETEST_METADATA, encoding="utf-8") as infile:
         metadata = yaml.load(infile, Loader=yaml.CLoader)
     expected_version = metadata["Version"]
-    args = mock.Mock()
+    args = mock.MagicMock(spec=Namespace)
     args.metadata_source = ACCEPTANCETEST_METADATA
     args.source_format = 'yaml'
     args.outfile = temp_version_file
