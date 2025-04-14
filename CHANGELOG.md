@@ -1,6 +1,12 @@
 # Changelog
 
-## v3.0.0 (tba)
+## v3.0.1 (2025-04-14)
+
+### New
+
+* Provide type information and add `py.typed` file. [DudeNr33]
+
+## v3.0.0 (2024-11-04)
 
 ### New
 
@@ -12,8 +18,6 @@
 
 * New CLI command `--pyivf-make_version` with greater flexibility - you can specify all options via command line options (without needing a YAML file),
 or overwrite any of the parameters provided in the input file or distribution metadata. [DudeNr33]
-
-* Provide type information and add `py.typed` file. [DudeNr33]
 
 ### Internal
 
