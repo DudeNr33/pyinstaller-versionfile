@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyinstaller_versionfile"
-version = "3.0.0"
+version = "3.0.1"
 description = "Create a windows version-file from metadata stored in a simple self-written YAML file or obtained from an installed distribution."
 authors = ["Andreas Finkler"]
 license = "MIT"
