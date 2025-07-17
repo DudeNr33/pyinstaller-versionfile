@@ -3,6 +3,7 @@ Author: Andreas Finkler
 """
 # pylint: disable=too-many-arguments, too-many-positional-arguments
 from __future__ import annotations
+from collections import UserDict
 from typing import Optional, Union, TypedDict, Any
 
 import codecs
@@ -21,6 +22,15 @@ except ImportError:  # pragma: no cover
 
 from pyinstaller_versionfile import exceptions
 
+class KwargsDict(UserDict):
+    """Wrapper class for kwargs to overwrite the setdefault method."""
+
+    def setdefault(self, key: Any, default: Optional[Any] = None) -> Any:
+        """set default value for key if it does not exist or is None."""
+
+        if self.data.get(key, None) is None:
+            self.data[key] = default
+        return self.data[key]
 
 class MetadataKwargs(TypedDict, total=False):
     """Helper class to specify type hints for the kwargs used in some of the methods."""
@@ -93,18 +103,18 @@ class MetaData:
         ]
         company = ", ".join([field for field in meta_fields if field])
 
-        kwargs.setdefault("version", meta.get("Version", None))
-        kwargs.setdefault("company_name", company)
-        kwargs.setdefault("file_description", meta.get("Summary", None))
-        kwargs.setdefault("internal_name", meta.get("Name", None))
-        kwargs.setdefault("legal_copyright", meta.get("License", None))
-        kwargs.setdefault("original_filename", meta.get("Name", None))
-        kwargs.setdefault("product_name", meta.get("Name", None))
-        kwargs.setdefault(
-            "translations", cls.default_translations
-        )
+        keywords = KwargsDict(kwargs)
 
-        return cls(**kwargs)
+        keywords.setdefault("version", meta.get("Version", None))
+        keywords.setdefault("company_name", company)
+        keywords.setdefault("file_description", meta.get("Summary", None))
+        keywords.setdefault("internal_name", meta.get("Name", None))
+        keywords.setdefault("legal_copyright", meta.get("License", None))
+        keywords.setdefault("original_filename", meta.get("Name", None))
+        keywords.setdefault("product_name", meta.get("Name", None))
+        keywords.setdefault("translations", cls.default_translations)
+
+        return cls(**keywords)
 
     @classmethod
     def from_file(cls, filepath: str, **kwargs: Any) -> MetaData:
