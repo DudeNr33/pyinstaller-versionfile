@@ -23,9 +23,11 @@ except ImportError:  # pragma: no cover
 from pyinstaller_versionfile import exceptions
 
 class KwargsDict(UserDict):
+    """Wrapper class for kwargs to overwrite the setdefault method."""
+
     def setdefault(self, key, default=None):
         """set default value for key if it does not exist or is None."""
-        
+
         if self.data.get(key, None) is None:
             self.data[key] = default
         return self.data[key]
