@@ -3,6 +3,7 @@ Author: Andreas Finkler
 """
 # pylint: disable=too-many-arguments, too-many-positional-arguments
 from __future__ import annotations
+from collections import UserDict
 from typing import Optional, Union, TypedDict, Any
 
 import codecs
@@ -21,6 +22,13 @@ except ImportError:  # pragma: no cover
 
 from pyinstaller_versionfile import exceptions
 
+class KwargsDict(UserDict):
+    def setdefault(self, key, default=None):
+        """set default value for key if it does not exist or is None."""
+        
+        if self.data.get(key, None) is None:
+            self.data[key] = default
+        return self.data[key]
 
 class MetadataKwargs(TypedDict, total=False):
     """Helper class to specify type hints for the kwargs used in some of the methods."""
@@ -92,6 +100,8 @@ class MetaData:
             meta.get("Home-page", None),
         ]
         company = ", ".join([field for field in meta_fields if field])
+
+        kwargs = KwargsDict(kwargs)
 
         kwargs.setdefault("version", meta.get("Version", None))
         kwargs.setdefault("company_name", company)
