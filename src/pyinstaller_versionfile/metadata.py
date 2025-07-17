@@ -25,7 +25,7 @@ from pyinstaller_versionfile import exceptions
 class KwargsDict(UserDict):
     """Wrapper class for kwargs to overwrite the setdefault method."""
 
-    def setdefault(self, key, default=None):
+    def setdefault(self, key: Any, default: Optional[Any] = None) -> Any:
         """set default value for key if it does not exist or is None."""
 
         if self.data.get(key, None) is None:
@@ -103,20 +103,18 @@ class MetaData:
         ]
         company = ", ".join([field for field in meta_fields if field])
 
-        kwargs = KwargsDict(kwargs)
+        keywords = KwargsDict(kwargs)
 
-        kwargs.setdefault("version", meta.get("Version", None))
-        kwargs.setdefault("company_name", company)
-        kwargs.setdefault("file_description", meta.get("Summary", None))
-        kwargs.setdefault("internal_name", meta.get("Name", None))
-        kwargs.setdefault("legal_copyright", meta.get("License", None))
-        kwargs.setdefault("original_filename", meta.get("Name", None))
-        kwargs.setdefault("product_name", meta.get("Name", None))
-        kwargs.setdefault(
-            "translations", cls.default_translations
-        )
+        keywords.setdefault("version", meta.get("Version", None))
+        keywords.setdefault("company_name", company)
+        keywords.setdefault("file_description", meta.get("Summary", None))
+        keywords.setdefault("internal_name", meta.get("Name", None))
+        keywords.setdefault("legal_copyright", meta.get("License", None))
+        keywords.setdefault("original_filename", meta.get("Name", None))
+        keywords.setdefault("product_name", meta.get("Name", None))
+        keywords.setdefault("translations", cls.default_translations)
 
-        return cls(**kwargs)
+        return cls(**keywords)
 
     @classmethod
     def from_file(cls, filepath: str, **kwargs: Any) -> MetaData:
