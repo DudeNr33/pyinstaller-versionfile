@@ -2,11 +2,15 @@ import os
 import typing as t
 from pathlib import Path
 
-import PyInstaller.utils.win32.versioninfo as vi
 import pytest
 
 import pyinstaller_versionfile
 from pyinstaller_versionfile.metadata import MetadataKwargs
+
+vi = pytest.importorskip(
+    "PyInstaller.utils.win32.versioninfo",
+    reason="PyInstaller is not installed",
+)
 
 
 def read_versionfile(
