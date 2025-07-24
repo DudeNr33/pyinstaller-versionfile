@@ -38,7 +38,7 @@ VSVersionInfo(
         StringStruct(u'OriginalFilename', u'acceptancetest_metadata'),
         StringStruct(u'ProductName', u'Acceptance Test Unit Test'),
         StringStruct(u'ProductVersion', u'4.7.1.1')])
-      ]), 
+      ]),
     VarFileInfo([VarStruct(u'Translation', [0, 1252, 1031, 1200])])
   ]
 )
