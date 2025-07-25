@@ -3,6 +3,7 @@ Author: Andreas Finkler
 
 Unit tests for pyinstaller_versionfile.writer.
 """
+from pathlib import Path
 from unittest import mock
 
 import pytest
@@ -146,3 +147,29 @@ def test_save_directory_passed_raises_usageerror(prepared_writer, tmpdir):
     """
     with pytest.raises(UsageError):
         prepared_writer.save(str(tmpdir))
+
+
+def test_versionfile_endoffile(
+    prepared_writer: Writer, temp_version_file: Path
+) -> None:
+    """Test if versionfile ends with newline"""
+
+    prepared_writer.save(str(temp_version_file))
+
+    lines = temp_version_file.read_text(encoding="utf-8").splitlines(keepends=True)
+
+    assert lines[-1].endswith("\n"), "Last line should end with a newline character."
+
+
+def test_versionfile_tailingwhitespaces(
+    prepared_writer: Writer, temp_version_file: Path
+) -> None:
+    """Test if versionfile has no trailing whitespaces"""
+
+    prepared_writer.save(str(temp_version_file))
+
+    lines = temp_version_file.read_text(encoding="utf-8").splitlines(keepends=False)
+
+    assert not any(
+        line.endswith(" ") for line in lines
+    ), "No line should end with a space character."

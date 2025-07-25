@@ -41,7 +41,7 @@ class Writer:
             raise InternalUsageError("Not all necessary parameters provided by MetaData.to_dict()")
 
         with codecs.open(TEMPLATE_FILE, encoding="utf-8") as infile:
-            template: Template = Template(infile.read())
+            template: Template = Template(infile.read(), keep_trailing_newline=True)
         try:
             self._content = template.render(**data)
         except UndefinedError as err:
