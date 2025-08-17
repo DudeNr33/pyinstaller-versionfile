@@ -3,7 +3,13 @@
 ## Installing the project
 
 This project uses [Poetry](https://python-poetry.org/) for dependency management and packaging. 
-Therefore Poetry should be [installed](https://python-poetry.org/docs/main/#installation) on your local machine.
+Therefore, Poetry should be [installed](https://python-poetry.org/docs/main/#installation) on your local machine.
+
+To install requirements, in the root directory, run:
+
+```bash
+poetry install
+```
 
 ## Running tests
 

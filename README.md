@@ -47,7 +47,7 @@ You can specify all parameters (except translations) via CLI options. If not spe
 Static information like company name or file description can also be provided from other sources, which can be selected via `--source-format`:
 
 * `yaml`: take the information from a YAML file
-* `dist` or `distribution`: take the information from a installed Python package by reading its distribution metadata
+* `dist` or `distribution`: take the information from an installed Python package by reading its distribution metadata
 
 If `--source-format` is specified, `--metadata-source` must be given in addition and specify either the path to the YAML file, or the name of the Python package.
 All options passed additionally can be used to overwrite the information extracted from `--metadata-source`.
