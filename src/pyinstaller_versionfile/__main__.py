@@ -135,7 +135,7 @@ def create_version_file(args: Union[Namespace, Optional[Sequence[str]]] = None) 
             version=args.version,
         )
     else:
-        # because of 'choises' in --source-format this case should not be entered
+        # because of 'choices' in --source-format this case should not be entered
         raise exceptions.InternalUsageError(
             "Unexpected behaviour in main. Please check parser definition."
         )
