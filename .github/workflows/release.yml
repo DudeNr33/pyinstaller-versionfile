@@ -8,19 +8,40 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6.1.0
         with:
           python-version: 3.12
       - name: Setup poetry
-        uses: abatilo/actions-poetry@v3.0.0
+        uses: abatilo/actions-poetry@v3.0.2
         with:
-          poetry-version: 1.8.3
-      - name: Configure Poetry
-        run: poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
+          poetry-version: 2.3.2
       - name: Combine Readme and Changelog for PyPI
         run: |
           cp README.md README_ONLY.md
           cat README_ONLY.md CHANGELOG.md > README.md
-      - name: Publish package
-        run: poetry publish --build
+      - name: Build package
+        run: poetry build
+      - name: Store the distribution packages
+        uses: actions/upload-artifact@v5
+        with:
+          name: python-package-distributions
+          path: dist/
+  publish-to-pypi:
+    name: Publish Python distribution to PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/pyinstaller_versionfile
+    permissions:
+      # mandatory for trusted publishing
+      id-token: write
+    steps:
+      - name: Download distribution files
+        uses: actions/download-artifact@v6
+        with:
+          name: python-package-distributions
+          path: dist/
+      - name: Publish distribution to PyPI
+        uses: pypa/gh-action-pypi-publish@v1.13.0
