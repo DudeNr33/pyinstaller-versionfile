@@ -11,13 +11,16 @@ from jinja2.exceptions import UndefinedError
 from pyinstaller_versionfile.exceptions import InternalUsageError, UsageError
 from pyinstaller_versionfile.metadata import MetaData
 
-TEMPLATE_FILE = os.path.join(os.path.abspath(os.path.dirname(__file__)), "version_file_template.txt")
+TEMPLATE_FILE = os.path.join(
+    os.path.abspath(os.path.dirname(__file__)), "version_file_template.txt"
+)
 
 
 class Writer:
     """
     Creates the output file.
     """
+
     NECESSARY_PARAMETERS = (
         "Version",
         "CompanyName",
@@ -38,7 +41,9 @@ class Writer:
         """
         data = self.metadata.to_dict()
         if any(param not in data for param in self.NECESSARY_PARAMETERS):
-            raise InternalUsageError("Not all necessary parameters provided by MetaData.to_dict()")
+            raise InternalUsageError(
+                "Not all necessary parameters provided by MetaData.to_dict()"
+            )
 
         with codecs.open(TEMPLATE_FILE, encoding="utf-8") as infile:
             template: Template = Template(infile.read(), keep_trailing_newline=True)
@@ -54,8 +59,12 @@ class Writer:
         Save the rendered outfile to disk.
         """
         if not self._content:
-            raise InternalUsageError("Called Writer.save() before calling Writer.render()")
+            raise InternalUsageError(
+                "Called Writer.save() before calling Writer.render()"
+            )
         if os.path.isdir(filepath):
-            raise UsageError("You must specify a file to save the output. Received a directory name instead.")
+            raise UsageError(
+                "You must specify a file to save the output. Received a directory name instead."
+            )
         with codecs.open(filepath, "w", encoding="utf-8") as file_handle:
             file_handle.write(self._content)

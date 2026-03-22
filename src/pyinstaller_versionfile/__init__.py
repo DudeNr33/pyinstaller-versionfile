@@ -3,6 +3,7 @@ Author: Andreas Finkler
 
 Functional API for programmatic use.
 """
+
 # pylint: disable=too-many-arguments, too-many-positional-arguments
 
 from typing import Optional
