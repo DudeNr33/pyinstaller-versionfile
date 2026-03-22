@@ -1,11 +1,10 @@
 [tool.poetry]
 name = "pyinstaller_versionfile"
-version = "3.0.1"
+version = "3.1.0"
 description = "Create a windows version-file from metadata stored in a simple self-written YAML file or obtained from an installed distribution."
 authors = ["Andreas Finkler"]
 license = "MIT"
 readme = "README.md"
-include = ["CHANGELOG.md", "LICENSE", "tox.ini", "pylintrc", "test"]
 repository = "https://github.com/DudeNr33/pyinstaller-versionfile"
 homepage = "https://github.com/DudeNr33/pyinstaller-versionfile"
 classifiers = [
@@ -32,7 +31,7 @@ pylint = "^3.2.7"
 pytest = "^8.3.3"
 tox = "^4.50.3"
 black = "^26.3.1"
-pyinstaller = { version = "^6.10.0", python = "<3.14" }             # PyInstaller unfortunately does not use "<4.0" as upper bound - this Python restriction will need to be updated once in a while
+pyinstaller = { version = "^6.10.0", python = "<3.15" }             # PyInstaller unfortunately does not use "<4.0" as upper bound - this Python restriction will need to be updated once in a while
 pywin32 = { version = "^307", markers = "sys_platform == 'win32'" }
 mypy = "^1.15.0"
 types-pyyaml = "^6.0.12.20250402"

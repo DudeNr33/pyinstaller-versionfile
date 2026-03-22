@@ -1,5 +1,13 @@
 # Changelog
 
+## v3.1.0 (2026-03-22)
+
+### New
+
+* Drop support for Python <3.10. [DudeNr33]
+
+* Remove useless files in distribution. [DudeNr33]
+
 ## v3.0.1 (2025-04-14)
 
 ### New
