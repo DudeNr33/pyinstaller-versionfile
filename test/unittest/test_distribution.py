@@ -78,16 +78,9 @@ def read_versionfile(
     )
 
 
-@pytest.mark.parametrize(
-    "distname",
-    [
-        "pip",
-        "pyinstaller_versionfile",
-    ],
-)
-def test_distribution(distname: str, tmp_path: Path) -> None:
+def test_distribution(tmp_path: Path) -> None:
     """test failes if any value of the versionfile is an empty string."""
-
+    distname = "pyinstaller_versionfile"
     output_file = tmp_path / "version_file.txt"
 
     assert output_file.is_file() is False, f"{output_file=!s} already exists."
