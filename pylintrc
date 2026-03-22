@@ -1,5 +1,6 @@
 [MASTER]
 load-plugins=pylint.extensions.mccabe
+py-version=3.10
 
 [DESIGN]
 max-complexity=10

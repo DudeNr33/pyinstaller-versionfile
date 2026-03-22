@@ -2,6 +2,7 @@
 Exception classes for pyinstaller-versionfile.
 """
 
+
 class InputError(Exception):
     """
     The given metadata input file is not as expected.
@@ -33,4 +34,6 @@ class InternalUsageError(Exception):
     """
 
     def __init__(self, message: str) -> None:
-        super(InternalUsageError, self).__init__(self.MESSAGE_PREFIX + message)  # pylint: disable=super-with-arguments
+        super().__init__(
+            self.MESSAGE_PREFIX + message
+        )  # pylint: disable=super-with-arguments
