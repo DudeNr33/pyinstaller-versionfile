@@ -28,7 +28,7 @@ packaging = "*"
 [tool.poetry.group.dev.dependencies]
 setuptools = ">=74.1.2,<79.0.0"
 pylint = "^3.2.7"
-pytest = "^8.3.3"
+pytest = ">=8.3.3,<10.0.0"
 tox = "^4.50.3"
 black = "^26.3.1"
 pyinstaller = { version = "^6.10.0", python = "<3.15" }             # PyInstaller unfortunately does not use "<4.0" as upper bound - this Python restriction will need to be updated once in a while
