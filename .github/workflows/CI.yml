@@ -9,13 +9,19 @@ on:
   pull_request:
     branches: [ master ]
 
+permissions: {}
+
 jobs:
   lint:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.10"
       - name: Install dependencies
@@ -24,16 +30,19 @@ jobs:
         run: tox -e lint
 
   unittest:
-
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python: ["3.10", "3.11", "3.12", "3.13", "3.14"]
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Setup Python
-        uses: actions/setup-python@v6.1.0
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ matrix.python }}
       - name: Install dependencies
@@ -42,14 +51,17 @@ jobs:
         run: tox
 
   integrationtest:
-
+    permissions:
+      contents: read
     runs-on: windows-latest
     needs: unittest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Setup Python
-        uses: actions/setup-python@v6.1.0
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.13"
       - name: Install dependencies
