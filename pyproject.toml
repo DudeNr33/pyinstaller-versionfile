@@ -27,7 +27,7 @@ packaging = "*"
 
 [tool.poetry.group.dev.dependencies]
 setuptools = ">=74.1.2,<84.0.0"
-pylint = "^3.2.7"
+pylint = ">=3.2.7,<5.0.0"
 pytest = ">=8.3.3,<10.0.0"
 tox = "^4.50.3"
 black = "^26.3.1"
